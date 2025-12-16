@@ -1,0 +1,157 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="[Your Team Members' Names]" />
+    <title>About Us - KXO205 Accommodation Booking</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Dynamic Navigation -->
+    <?php include("includes/navbar.php"); ?>
+
+    <!-- Main Content -->
+    <main class="container mt-5">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2 class="mb-4">About KXO205 Accommodation Platform</h2>
+          <p class="lead">
+            Welcome to KXO205 Accommodation!
+            the premier accommodation platform designed by students, for tourists. Our mission is to simplify the process of finding and managing tourist housing, creating a seamless experience for everyone.
+          </p>
+
+          <h4 class="mt-5">How to search for accommodation</h4>
+          <p>1.Click the "Accommodations" link in the top navigation bar</p>
+          <p>2.Enter your destination, check-in, and check-out dates</p>
+          <p>3.Use filters to narrow down your search</p>
+          <p>4.Review the search results and select the property you enjoy</p>
+
+          <h4 class="mt-5">How to book</h4>
+          <p>1.Select your property and click for details</p>
+          <p>2.Select room type and check-in dates</p>
+          <p>3.Click the "Book Now" button</p>
+          <p>4.Log in or register an account to complete your reservation</p>
+
+          <h4 class="mt-5" id="our-team">Our team</h4>
+          <p>Shengyi Shi [ID:744564]</p>
+          <p>Yuming Deng [ID:744571]</p>
+          <p>Mingxuan Xu [ID:744580]</p>
+          <p>Yanzhang Lu [ID:744586]</p>
+
+          <h4 class="mt-5" id="team-collaboration">Team collaboration</h4>
+          <p>Shengyi Shi:Responsible for the implementation of JavaScript interactive functions, including search function, dark mode switching, etc.</p>
+          <p>Yuming Deng:Responsible for the HTML structure design and overall layout of all pages, ensuring that the page structure is clear and reasonable.</p>
+          <p>Mingxuan Xu:Responsible for CSS style design and responsive layout, ensuring the website displays flawlessly on various devices.</p>
+          <p>Yanzhang Lu:Responsible for project planning, schedule tracking, team coordination, and documentation.</p>
+
+          <h4 class="mt-5">Project highlights:</h4>
+          <p>esponsive Design - Our website is designed to display perfectly on various devices, from mobile phones to desktop computers</p>
+          <p>Dark Mode - We've implemented a user-friendly dark mode switching feature to enhance the nighttime experience</p>
+          <p>Intuitive search function - An efficient search and filtering system has been developed to help users quickly find their ideal accommodation</p>
+          <p>Modern UI Design - Employs the Bootstrap framework and custom CSS to create a beautiful and functional user interface</p>
+
+          <h4 class="mt-5" id="development-challenges">Development Challenges section</h4>
+          <p>Responsive Design Adaptation - Ensuring that your website displays well on various screen sizes can be a challenge. We solved this problem by using the Bootstrap grid system and media queries</p>
+          <p>Dark Mode Implementation - Implementing smooth dark mode switching requires careful planning of CSS variables and JavaScript logic, ensuring that all elements switch topics correctly</p>
+          <p>Team Collaboration and Version Control - Ensuring code consistency and resolving merge conflicts is a learning process during team development. We solved this problem by developing code specifications and regular communication</p>
+          <p>Performance Optimization - Ensuring that pages load quickly and run smoothly requires optimizing images, compressing code, and reducing HTTP requests. We solved this problem with code splitting and resource optimization</p>
+
+
+          <h4 class="mt-5">Our Values</h4>
+          <p class="md-5">
+            These core values guide every decision and action we take.
+          </p>
+          <div class="core-value"> 
+            <h4>Integrity</h4> 
+              <div class="col-md-9"> 
+                <p>We believe that trust is the foundation of any meaningful relationship. We maintain absolute transparency in our pricing, policies, and partnerships. Our reviews are never edited or censored (except for inappropriate content), and we're honest about both the strengths and limitations of every property.</p>
+                <p>This commitment extends to our internal operations where we've implemented open salary policies and democratic decision-making processes. We're accountable to our users, our partners, and each other.</p> 
+              </div> 
+          <div class="core-value"> 
+            <h4>Empathy</h4>
+            <div class="col-md-9"> 
+              <p>We design every feature with real human experiences in mind. Our customer service team undergoes extensive training in cultural sensitivity and crisis management. We understand that travel involves vulnerability – being in unfamiliar places, dealing with language barriers, and managing unexpected situations.</p> <p>This empathy extends to property owners who entrust us with their livelihoods. We've created the industry's first Property Owner Bill of Rights, ensuring fair treatment, prompt payments, and dedicated support.</p> 
+            </div>
+          <div class="core-value">
+            <h4>Innovation</h4>
+            <div class="col-md-9"> 
+              <p>We challenge industry conventions and embrace emerging technologies that enhance the travel experience. Our R&D team explores applications of AI, blockchain, and virtual reality to solve real traveler problems.</p> 
+              <p>Recent innovations include our AI-powered travel assistant that provides personalized recommendations based on travel style, our blockchain-based smart contracts that ensure transparent transactions, and our virtual reality property tours that give travelers accurate expectations before booking.</p> 
+            </div> 
+          </div>
+          <div class="core-value">
+            <h4>Sustainability</h4>
+            <div class="col-md-9"> 
+              <p>We recognize our responsibility to protect the destinations we help people visit. Our sustainability program includes carbon offset options for every booking, partnerships with eco-certified properties, and educational resources for travelers about responsible tourism.</p> 
+              <p>We've established the GlobalStay Foundation, which directs 1% of our annual revenue to community development projects in popular travel destinations. We also prioritize working with properties that implement environmentally friendly practices and support local economies.</p>
+              </div> 
+          </div>
+          <div class="core-value">
+            <h4>Community</h4>
+            <div class="col-md-9"> 
+              <p>We're building more than a booking platform – we're creating a global community of travelers and hosts. Our community features include traveler forums, local experience sharing, and host appreciation programs.</p> 
+              <p>We facilitate meaningful connections through our "Meet the Host" program and local experience marketplace. Our annual GlobalStay Community Summit brings together travelers, hosts, and industry experts to share insights and shape the future of travel.</p>
+              </div>
+          </div>
+
+          <h4 class="mt-5">Future Vision</h4>
+          <p>
+            Looking ahead, KXO205 will continue to enhance accommodation experiences for global travelers through technological innovation. We plan to further expand our property network, particularly in emerging travel destinations, offering travelers more unique choices.
+          </p>
+          We will increase investment in artificial intelligence and big data, developing smarter personalized recommendation systems to help users discover hidden gems that match their preferences. Simultaneously, we will focus on sustainable tourism development, promoting eco-friendly accommodation options and encouraging responsible travel.
+          <p>
+            Our long-term goal is to become the world's most trusted accommodation booking platform, not only connecting travelers with accommodations but also serving as the starting point for creating wonderful travel memories. We believe that through continuous innovation and quality service, GlobalStay will continue to lead industry development.
+          </p>
+
+          <h4 class="mt-5" id="resources">Resources & Credits</h4>
+          <ul>
+            <li>Bootstrap 5 — CSS framework (MIT License). Source: https://getbootstrap.com/</li>
+            <li>Bootstrap Icons — Icon set (MIT License). Now loaded locally from /css/bootstrap-icons.min.css.</li>
+            <li>Project styles and scripts (project files): css/style.css, js/dark-mode.js, js/validation.js, js/scroll-to-top.js</li>
+            <li>Project images (local assets): /img/bg.avif, /img/house1.avif, /img/house2.avif, /img/house3.avif, /img/house4.avif, /img/house5.avif, /img/house6.avif</li>
+            <li>External images used (Unsplash)</li>
+            <li>Fonts: system UI fonts (e.g., Arial, sans-serif) used as fallbacks in css/style.css</li>
+          </ul>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="container py-5">
+      <div class="row">
+        <div class="col-12 col-md">
+          <i class="bi bi-house-heart-fill" style="font-size: 24px"></i>
+          <small class="d-block mb-3 text-muted">&copy; 2025 KXO205 Accommodation</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Function</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="link-secondary" href="index.php#featured-accommodations">Featured accommodation</a></li>
+            <li><a class="link-secondary" href="about.php#team-collaboration">Team features</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Resource</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="link-secondary" href="about.php#resources">Resources & Credits</a></li>
+            <li><a class="link-secondary" href="about.php#development-challenges">Development Challenges</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="link-secondary" href="about.php#our-team">Team</a></li>
+            <li><a class="link-secondary" href="#">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <script src="js/dark-mode.js"></script>
+    <script src="js/scroll-to-top.js"></script>
+  </body>
+</html>

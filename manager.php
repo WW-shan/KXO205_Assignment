@@ -1,0 +1,168 @@
+<?php
+session_start();
+require "includes/dbconn.php";
+
+// Check if user is manager
+if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
+    header("Location: login.php");
+    exit;
+}
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="[Your Team Members' Names]" />
+    <title>Manager Dashboard - KXO205 Accommodation Booking</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Dynamic Navigation -->
+    <?php include("includes/navbar.php"); ?>
+
+    <!-- Main Content -->
+    <main class="container mt-5">
+      <h2 class="mb-4">Platform Management</h2>
+
+      <!-- User Management Table -->
+      <h4 class="mt-5 mb-3">User Management</h4>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">User ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Role</th>
+              <th scope="col">Address</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            require "includes/dbconn.php";
+
+            $sql = "SELECT * FROM USERS;";
+            if ($result = $conn->query($sql)) {
+              if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  echo "<tr>";
+                  echo "<td>" . $row["userId"] . "</td>";
+                  echo "<td>" . $row["firstName"] . " " . $row["lastName"] . "</td>";
+                  echo "<td>" . $row["email"] . "</td>";
+                  echo "<td>" . $row["phoneNumber"] . "</td>";
+                  echo "<td>" . $row["role"] . "</td>";
+                  echo "<td>" . $row["postalAddress"] . "</td>";
+                  echo "<td>";
+                  echo "<a href='edit-user.php?id=" . $row["userId"] . "' class='btn btn-sm btn-primary me-2'><i class='bi bi-pencil-square'></i> Edit</a>";
+                  if ($row["userId"] != $_SESSION["userId"]) {
+                    echo "<a href='delete-user.php?id=" . $row["userId"] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure?')\"><i class='bi bi-trash'></i> Delete</a>";
+                  }
+                  echo "</td>";
+                  echo "</tr>";
+                }
+              }
+              $result->free();
+            }
+            ?>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Accommodations Table -->
+      <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+        <h4 class="mb-0">All Accommodations</h4>
+        <a href="add-accommodation.php" class="btn btn-success btn-sm">
+          <i class="bi bi-plus-circle me-2"></i>Add Accommodation
+        </a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Host</th>
+              <th scope="col">City</th>
+              <th scope="col">Price/Night</th>
+              <th scope="col">Bedrooms</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $sql = "SELECT a.*, u.firstName, u.lastName FROM ACCOMMODATIONS a JOIN USERS u ON a.hostId = u.userId;";
+            if ($result = $conn->query($sql)) {
+              if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  echo "<tr>";
+                  echo "<td>" . $row["accommodationId"] . "</td>";
+                  echo "<td>" . $row["name"] . "</td>";
+                  echo "<td>" . $row["firstName"] . " " . $row["lastName"] . "</td>";
+                  echo "<td>" . $row["city"] . "</td>";
+                  echo "<td>$" . $row["pricePerNight"] . "</td>";
+                  echo "<td>" . $row["bedrooms"] . "</td>";
+                  echo "<td><a href='edit-accommodation.php?id=" . $row["accommodationId"] . "' class='btn btn-sm btn-primary me-2'><i class='bi bi-pencil-square'></i> Edit</a>";
+                  echo "<a href='delete-accommodation.php?id=" . $row["accommodationId"] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure?')\"><i class='bi bi-trash'></i> Delete</a></td>";
+                  echo "</tr>";
+                }
+              }
+              $result->free();
+            }
+            ?>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bookings Table -->
+      <h4 class="mt-5 mb-3">All Bookings</h4>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Booking ID</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Property</th>
+              <th scope="col">Check-in</th>
+              <th scope="col">Actions</th>
+              <th scope="col">Check-out</th>
+              <th scope="col">Total</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $sql = "SELECT b.*, u.firstName, u.lastName, a.name FROM BOOKINGS b JOIN USERS u ON b.userId = u.userId JOIN ACCOMMODATIONS a ON b.accommodationId = a.accommodationId;";
+            if ($result = $conn->query($sql)) {
+              if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  echo "<tr>";
+                  echo "<td>" . $row["bookingId"] . "</td>";
+                  echo "<td>" . $row["firstName"] . " " . $row["lastName"] . "</td>";
+                  echo "<td>" . $row["name"] . "</td>";
+                  echo "<td>" . $row["checkInDate"] . "</td>";
+                  echo "<td><a href='cancel-booking.php?id=" . $row["bookingId"] . "' class='btn btn-sm btn-warning' onclick=\"return confirm('Are you sure?')\"><i class='bi bi-x-circle'></i> Cancel</a></td>";
+                  echo "<td>" . $row["checkOutDate"] . "</td>";
+                  echo "<td>$" . $row["totalPrice"] . "</td>";
+                  echo "<td>" . $row["status"] . "</td>";
+                  echo "</tr>";
+                }
+              }
+              $result->free();
+            }
+            ?>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/dark-mode.js"></script>
+    <script src="js/scroll-to-top.js"></script>
+  </body>
+</html>

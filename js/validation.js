@@ -185,9 +185,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const lastName = document.getElementById("lastName");
     const email = document.getElementById("email");
     const mobile = document.getElementById("mobile");
+    const postalAddress = document.getElementById("postalAddress");
     const password = document.getElementById("password");
     const confirmPassword = document.getElementById("confirmPassword");
-    const address = document.getElementById("address");
     const abn = document.getElementById("abn");
 
     // Initialize error placeholders
@@ -196,9 +196,9 @@ document.addEventListener("DOMContentLoaded", function () {
       lastName,
       email,
       mobile,
+      postalAddress,
       password,
       confirmPassword,
-      address,
       abn,
     ].forEach((field) => field && ensureErrorPlaceholder(field));
 
@@ -213,6 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "blur",
       () => checkRequired(mobile) && checkMobile(mobile)
     );
+    postalAddress.addEventListener("blur", () => checkRequired(postalAddress));
     password.addEventListener(
       "blur",
       () => checkRequired(password) && checkPasswordStrength(password)
@@ -223,7 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
         checkRequired(confirmPassword) &&
         checkPasswordsMatch(password, confirmPassword)
     );
-    address.addEventListener("blur", () => checkRequired(address));
     abn.addEventListener(
       "blur",
       () => userType.value === "host" && checkRequired(abn)
@@ -241,7 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     registrationForm.addEventListener("submit", function (e) {
-      e.preventDefault();
       let isValid =
         checkRequired(firstName) &&
         checkRequired(lastName) &&
@@ -249,23 +248,18 @@ document.addEventListener("DOMContentLoaded", function () {
         checkEmail(email) &&
         checkRequired(mobile) &&
         checkMobile(mobile) &&
+        checkRequired(postalAddress) &&
         checkRequired(password) &&
         checkPasswordStrength(password) &&
         checkRequired(confirmPassword) &&
-        checkPasswordsMatch(password, confirmPassword) &&
-        checkRequired(address);
+        checkPasswordsMatch(password, confirmPassword);
 
       if (userType.value === "host") {
         isValid = checkRequired(abn) && isValid;
       }
 
-      if (isValid) {
-        alert("Registration successful!");
-        registrationForm.reset();
-        document
-          .querySelectorAll(".is-valid, .is-invalid")
-          .forEach((el) => el.classList.remove("is-valid", "is-invalid"));
-        //redirect to the login page.
+      if (!isValid) {
+        e.preventDefault();
       }
     });
 
@@ -298,18 +292,13 @@ document.addEventListener("DOMContentLoaded", function () {
     loginPassword.addEventListener("blur", () => checkRequired(loginPassword));
 
     loginForm.addEventListener("submit", function (e) {
-      e.preventDefault();
       const isValid =
         checkRequired(loginEmail) &&
         checkEmail(loginEmail) &&
         checkRequired(loginPassword);
-      if (isValid) {
-        alert("Login successful!");
-        loginForm.reset();
-        document
-          .querySelectorAll(".is-valid, .is-invalid")
-          .forEach((el) => el.classList.remove("is-valid", "is-invalid"));
-        // redirect to the user's dashboard.
+
+      if (!isValid) {
+        e.preventDefault();
       }
     });
   }
@@ -349,7 +338,6 @@ document.addEventListener("DOMContentLoaded", function () {
     guests.addEventListener("blur", () => checkRequired(guests));
 
     searchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
       const isValid =
         checkRequired(destination) &&
         checkRequired(checkin) &&
@@ -357,9 +345,8 @@ document.addEventListener("DOMContentLoaded", function () {
         checkDates(checkin, checkout) &&
         checkRequired(guests);
 
-      if (isValid) {
-        alert("Search parameters are valid. Submitting search...");
-        // trigger a search query.
+      if (!isValid) {
+        e.preventDefault();
       }
     });
   }
@@ -424,8 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
       () => ccCvv.value.length >= 3 && checkCVV(ccCvv)
     );
 
-    bookingForm.addEventListener("submit", function (e) {
-      e.preventDefault();
+    bookingForm.addEventListener("submit", function () {
       const isValid =
         checkRequired(bookFirstName) &&
         checkRequired(bookLastName) &&

@@ -93,7 +93,7 @@ function hasConflict($conn, $accommodation_id, $check_in, $check_out)
     $conflict_sql = "SELECT COUNT(*) as count FROM BOOKING 
                     WHERE accommodationId = $accommodation_id 
                     AND status = 'confirmed'
-                    AND (checkInDate < '$check_out' AND checkOutDate > '$check_in');";
+                    AND (checkInDate < '$check_out' AND checkOutDate > '$check_in') FOR UPDATE;";
     $conflict_result = $conn->query($conflict_sql);
     if ($conflict_result) {
         $conflict_row = $conflict_result->fetch_assoc();
@@ -105,16 +105,38 @@ function hasConflict($conn, $accommodation_id, $check_in, $check_out)
 
 function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out, $guests, $price_per_night)
 {
-    $check_in_obj = new DateTime($check_in);
-    $check_out_obj = new DateTime($check_out);
-    $nights = $check_out_obj->diff($check_in_obj)->days;
-    $total_price = $price_per_night * $nights;
-    $payment_details = "Payment processed";
+    // Start transaction
+    $conn->begin_transaction();
+    
+    try {
+        // Re-check conflict with row lock
+        if (hasConflict($conn, $accommodation_id, $check_in, $check_out)) {
+            $conn->rollback();
+            return false;
+        }
+        
+        $check_in_obj = new DateTime($check_in);
+        $check_out_obj = new DateTime($check_out);
+        $nights = $check_out_obj->diff($check_in_obj)->days;
+        $total_price = $price_per_night * $nights;
+        $payment_details = "Payment processed";
 
-    $insert_sql = "INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) 
-                  VALUES ($user_id, $accommodation_id, '$check_in', '$check_out', $guests, $total_price, '$payment_details', 'confirmed');";
+        $insert_sql = "INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) 
+                      VALUES ($user_id, $accommodation_id, '$check_in', '$check_out', $guests, $total_price, '$payment_details', 'confirmed');";
 
-    return $conn->query($insert_sql);
+        $success = $conn->query($insert_sql);
+        
+        if ($success) {
+            $conn->commit();
+            return true;
+        } else {
+            $conn->rollback();
+            return false;
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+        return false;
+    }
 }
 ?>
 <!DOCTYPE html>

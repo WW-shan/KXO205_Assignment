@@ -1,8 +1,12 @@
 <?php
 require "includes/dbconn.php";
+require "includes/csrf.php";
 session_start();
 
 if (isset($_POST["email"]) && isset($_POST["password"])) {
+  // Verify CSRF token
+  verifyCsrfToken();
+  
   $userType       = htmlspecialchars($_POST["userType"]);
   $role           = ($userType === "host") ? "host" : "client";
   $firstName      = htmlspecialchars($_POST["firstName"]);
@@ -10,21 +14,49 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
   $email          = htmlspecialchars($_POST["email"]);
   $mobile         = htmlspecialchars($_POST["mobile"]);
   $postalAddress  = htmlspecialchars($_POST["postalAddress"] ?? "");
-  $password       = htmlspecialchars($_POST["password"]);
+  $password       = $_POST["password"]; // password_hash will handle sanitization
+  $confirmPassword = $_POST["confirmPassword"] ?? "";
   $abn            = htmlspecialchars($_POST["abn"] ?? "");
 
-  $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-  $sql = "INSERT INTO USER (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES (
-    \"$email\", \"$hashedPassword\", \"$firstName\", \"$lastName\", \"$mobile\", \"$postalAddress\", \"$role\", " . ($role === "host" ? "\"$abn\"" : "NULL") . "
-  )";
+  // Server-side validation
+  $isValid = true;
   
-  if ($result = $conn->query($sql)) {
-    $conn->close();
-    header("Location: login.php?registered=success");
-    exit;
-  } else {
-    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+  // 1. Check password match
+  if ($password !== $confirmPassword) {
+    $isValid = false;
+  }
+  // 2. Check password strength (6-12 chars, uppercase, lowercase, number, special char)
+  elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"\'<>,.?\/~`]).{6,12}$/', $password)) {
+    $isValid = false;
+  }
+  // 3. Check email uniqueness
+  else {
+    $emailCheck = $conn->real_escape_string($email);
+    $checkSql = "SELECT userId FROM USER WHERE email = '$emailCheck'";
+    $checkResult = $conn->query($checkSql);
+    if ($checkResult && $checkResult->num_rows > 0) {
+      $isValid = false;
+      $checkResult->free();
+    }
+    // 4. Check ABN for hosts
+    elseif ($role === "host" && empty($abn)) {
+      $isValid = false;
+    }
+  }
+
+  // If valid, proceed with registration
+  if ($isValid) {
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+    $sql = "INSERT INTO USER (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES (
+      \"$email\", \"$hashedPassword\", \"$firstName\", \"$lastName\", \"$mobile\", \"$postalAddress\", \"$role\", " . ($role === "host" ? "\"$abn\"" : "NULL") . "
+    )";
+    
+    if ($result = $conn->query($sql)) {
+      $conn->close();
+      header("Location: login.php?registered=success");
+      exit;
+    }
   }
   $conn->close();
 }
@@ -35,7 +67,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="[Your Team Members' Names]" />
+    <meta name="author" content="Shengyi Shi 744564, Yuming Deng 744571, Mingxuan Xu 744580, Yanzhang Lu 744586" />
     <title>Register - KXO205 Accommodation Booking</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/bootstrap-icons.min.css" rel="stylesheet" />
@@ -51,19 +83,8 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         <div class="col-md-8 col-lg-6">
           <h2 class="mb-4 text-center">Create Your Account</h2>
           
-          <?php if (!empty($errorMsg)): ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo $errorMsg; ?>
-            </div>
-          <?php endif; ?>
-
-          <?php if (!empty($successMsg)): ?>
-            <div class="alert alert-success" role="alert">
-                <?php echo $successMsg; ?>
-            </div>
-          <?php endif; ?>
-
           <form id="registrationForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" novalidate>
+            <?php csrfTokenField(); ?>
             <div class="mb-3">
               <label for="userType" class="form-label">User Type</label>
               <select class="form-select" id="userType" name="userType" required>

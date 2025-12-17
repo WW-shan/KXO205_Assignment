@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "includes/dbconn.php";
+require "includes/csrf.php";
 
 // Check if user is host or manager
 if (!isset($_SESSION["role"]) || ($_SESSION["role"] != "host" && $_SESSION["role"] != "manager")) {
@@ -15,6 +16,9 @@ if ($_SESSION["role"] == "manager") {
 if (empty($_POST)) {
     // show form
 } else {
+    // Verify CSRF token
+    verifyCsrfToken();
+    
     insertAccommodation();
     $conn->close();
     redirect($_SESSION["role"] == "host" ? "host.php" : "manager.php");
@@ -90,6 +94,7 @@ function insertAccommodation()
         <div class="row">
             <div class="col-md-8">
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <?php csrfTokenField(); ?>
                     <!-- Manager can select which host owns this property -->
                     <?php if ($_SESSION["role"] == "manager"): ?>
                     <div class="mb-3">

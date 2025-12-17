@@ -55,6 +55,7 @@ CREATE TABLE BOOKING (
     checkInDate DATE NOT NULL,
     checkOutDate DATE NOT NULL,
     guests INT NOT NULL,
+    phoneNumber VARCHAR(20) NOT NULL,
     totalPrice DECIMAL(10, 2) NOT NULL,
     paymentDetails TEXT NOT NULL, -- Encrypted payment info
     status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed',
@@ -94,13 +95,13 @@ INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, maxGuests
 (5, 'Skyline Apartment', '200 St Georges Tce', 'Perth', 310.00, 4, 2, 2, 'High-floor apartment with skyline views.', 'img/house2.avif', 0, 1, 0, 1);
 
 -- Bookings
-INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) VALUES
-(4, 1, '2025-11-15', '2025-11-18', 4, 1050.00, 'EncryptedDataHere', 'confirmed'),
-(4, 2, '2025-12-24', '2025-12-28', 2, 880.00, 'EncryptedDataHere', 'confirmed'),
-(5, 5, '2025-09-01', '2025-09-05', 2, 600.00, 'EncryptedDataHere', 'confirmed'),
-(4, 4, '2025-12-05', '2025-12-08', 5, 840.00, 'EncryptedDataHere', 'confirmed'),
-(5, 6, '2025-12-10', '2025-12-13', 2, 900.00, 'EncryptedDataHere', 'confirmed'),
-(4, 3, '2025-12-15', '2025-12-18', 4, 540.00, 'EncryptedDataHere', 'confirmed'),
-(5, 2, '2025-12-27', '2025-12-30', 2, 660.00, 'EncryptedDataHere', 'confirmed'),
-(4, 7, '2026-01-05', '2026-01-08', 3, 585.00, 'EncryptedDataHere', 'confirmed'),
-(5, 8, '2026-01-12', '2026-01-15', 2, 720.00, 'EncryptedDataHere', 'confirmed');
+INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, phoneNumber, totalPrice, paymentDetails, status) VALUES
+(4, 1, '2025-11-15', '2025-11-18', 4, '+61400111222', 1050.00, 'EncryptedDataHere', 'confirmed'),
+(4, 2, '2025-12-24', '2025-12-28', 2, '+61400111222', 880.00, 'EncryptedDataHere', 'confirmed'),
+(5, 5, '2025-09-01', '2025-09-05', 2, '+61400333444', 600.00, 'EncryptedDataHere', 'confirmed'),
+(4, 4, '2025-12-05', '2025-12-08', 5, '+61400111222', 840.00, 'EncryptedDataHere', 'confirmed'),
+(5, 6, '2025-12-10', '2025-12-13', 2, '+61400333444', 900.00, 'EncryptedDataHere', 'confirmed'),
+(4, 3, '2025-12-15', '2025-12-18', 4, '+61400111222', 540.00, 'EncryptedDataHere', 'confirmed'),
+(5, 2, '2025-12-27', '2025-12-30', 2, '+61400333444', 660.00, 'EncryptedDataHere', 'confirmed'),
+(4, 7, '2026-01-05', '2026-01-08', 3, '+61400111222', 585.00, 'EncryptedDataHere', 'confirmed'),
+(5, 8, '2026-01-12', '2026-01-15', 2, '+61400333444', 720.00, 'EncryptedDataHere', 'confirmed');

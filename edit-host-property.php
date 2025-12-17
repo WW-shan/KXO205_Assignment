@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "includes/dbconn.php";
+require "includes/csrf.php";
 
 // Check if user is host
 if (!isset($_SESSION["role"]) || $_SESSION["role"] != "host") {
@@ -21,6 +22,9 @@ if (empty($_POST)) {
         redirect("host.php");
     }
 } else {
+    // Verify CSRF token
+    verifyCsrfToken();
+    
     update();
     $conn->close();
     redirect("host.php");
@@ -88,6 +92,7 @@ function update()
         <div class="row">
             <div class="col-md-8">
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=$accommodation_id"); ?>">
+                    <?php csrfTokenField(); ?>
                     <div class="mb-3">
                         <label for="name" class="form-label">Property Name</label>
                         <input type="text" class="form-control" name="name" id="name" 

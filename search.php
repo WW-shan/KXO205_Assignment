@@ -52,29 +52,31 @@ function validateSearch($city, $check_in, $check_out, $guests)
 function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
 {
     $results = [];
+    
+    $city = $conn->real_escape_string($city);
+    $check_in = $conn->real_escape_string($check_in);
+    $check_out = $conn->real_escape_string($check_out);
+    $cityFilter = "%" . $city . "%";
+    
     $sql = "SELECT a.*, u.firstName, u.lastName, u.phoneNumber, u.email
                     FROM ACCOMMODATION a
                     JOIN USER u ON a.hostId = u.userId
-                    WHERE a.city LIKE ?
-                        AND a.maxGuests >= ?
+                    WHERE a.city LIKE '$cityFilter'
+                        AND a.maxGuests >= $guests
                         AND a.accommodationId NOT IN (
                                 SELECT accommodationId FROM BOOKING
-                                WHERE (checkInDate < ? AND checkOutDate > ?)
+                                WHERE (checkInDate < '$check_out' AND checkOutDate > '$check_in')
                                     AND status = 'confirmed'
                         )";
-
-    if ($stmt = $conn->prepare($sql)) {
-        $cityFilter = "%" . $city . "%";
-        $stmt->bind_param("siss", $cityFilter, $guests, $check_out, $check_in);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    
+    $result = $conn->query($sql);
+    if ($result) {
         while ($row = $result->fetch_assoc()) {
             $results[] = $row;
         }
-        $stmt->close();
+        $result->free();
         return $results;
     }
-
     return false;
 }
 ?>
@@ -83,7 +85,7 @@ function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="[Your Team Members' Names]" />
+    <meta name="author" content="Shengyi Shi 744564, Yuming Deng 744571, Mingxuan Xu 744580, Yanzhang Lu 744586" />
     <title>Find Stay - KXO205 Accommodation Booking</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/bootstrap-icons.min.css" rel="stylesheet" />

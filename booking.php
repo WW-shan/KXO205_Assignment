@@ -1,6 +1,8 @@
 <?php
 session_start();
 require "includes/dbconn.php";
+require "includes/csrf.php";
+require "includes/encryption.php";
 
 if (!isset($_SESSION["role"]) || $_SESSION["role"] != "client") {
     redirect("login.php");
@@ -15,6 +17,9 @@ $accommodation_id = intval($_GET["accommodation_id"]);
 $check_in = isset($_POST["check_in"]) ? htmlspecialchars($_POST["check_in"]) : (isset($_GET["check_in"]) ? htmlspecialchars($_GET["check_in"]) : "");
 $check_out = isset($_POST["check_out"]) ? htmlspecialchars($_POST["check_out"]) : (isset($_GET["check_out"]) ? htmlspecialchars($_GET["check_out"]) : "");
 $guests = isset($_POST["guests"]) ? intval($_POST["guests"]) : (isset($_GET["guests"]) ? intval($_GET["guests"]) : 0);
+$phone_number = isset($_POST["phone_number"]) ? htmlspecialchars($_POST["phone_number"]) : "";
+$payment_method = isset($_POST["payment_method"]) ? htmlspecialchars($_POST["payment_method"]) : "Credit Card";
+$card_last4 = isset($_POST["card_last4"]) ? htmlspecialchars($_POST["card_last4"]) : "";
 $user_id = $_SESSION["userId"];
 
 $accommodation = fetchAccommodation($conn, $accommodation_id);
@@ -24,13 +29,16 @@ if (!$accommodation) {
 
 $errors = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $errors = validateBooking($accommodation, $check_in, $check_out, $guests);
+    // Verify CSRF token
+    verifyCsrfToken();
+    
+    $errors = validateBooking($accommodation, $check_in, $check_out, $guests, $phone_number);
     if (empty($errors) && hasConflict($conn, $accommodation_id, $check_in, $check_out)) {
         $errors[] = "These dates are no longer available. Please choose different dates.";
     }
 
     if (empty($errors)) {
-        if (createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out, $guests, $accommodation["pricePerNight"])) {
+        if (createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out, $guests, $phone_number, $payment_method, $card_last4, $accommodation["pricePerNight"])) {
             $conn->close();
             redirect("client.php?success=Booking completed successfully!");
         }
@@ -70,7 +78,7 @@ function fetchAccommodation($conn, $accommodation_id)
     return null;
 }
 
-function validateBooking($accommodation, $check_in, $check_out, $guests)
+function validateBooking($accommodation, $check_in, $check_out, $guests, $phone_number)
 {
     $errs = [];
     if (empty($check_in)) {
@@ -84,6 +92,11 @@ function validateBooking($accommodation, $check_in, $check_out, $guests)
     }
     if ($guests <= 0 || $guests > $accommodation["maxGuests"]) {
         $errs[] = "Invalid number of guests. Maximum is " . $accommodation["maxGuests"];
+    }
+    if (empty($phone_number)) {
+        $errs[] = "Phone number is required";
+    } elseif (!preg_match('/^[0-9+\-\s()]{8,20}$/', $phone_number)) {
+        $errs[] = "Please enter a valid phone number";
     }
     return $errs;
 }
@@ -103,7 +116,7 @@ function hasConflict($conn, $accommodation_id, $check_in, $check_out)
     return false;
 }
 
-function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out, $guests, $price_per_night)
+function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out, $guests, $phone_number, $payment_method, $card_last4, $price_per_night)
 {
     // Start transaction
     $conn->begin_transaction();
@@ -119,10 +132,17 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
         $check_out_obj = new DateTime($check_out);
         $nights = $check_out_obj->diff($check_in_obj)->days;
         $total_price = $price_per_night * $nights;
-        $payment_details = "Payment processed";
+        
+        // Create and encrypt payment details
+        $payment_info = createPaymentDetails(
+            $payment_method,
+            $card_last4,
+            'TXN-' . uniqid()  // Generate unique transaction ID
+        );
+        $payment_details = encryptPaymentDetails($payment_info);
 
-        $insert_sql = "INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) 
-                      VALUES ($user_id, $accommodation_id, '$check_in', '$check_out', $guests, $total_price, '$payment_details', 'confirmed');";
+        $insert_sql = "INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, phoneNumber, totalPrice, paymentDetails, status) 
+                      VALUES ($user_id, $accommodation_id, '$check_in', '$check_out', $guests, '$phone_number', $total_price, '$payment_details', 'confirmed');";
 
         $success = $conn->query($insert_sql);
         
@@ -232,6 +252,7 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                         <?php endif; ?>
 
                         <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?accommodation_id=$accommodation_id"); ?>">
+                            <?php csrfTokenField(); ?>
                             <div class="mb-3">
                                 <label for="name" class="form-label">Full Name</label>
                                 <input type="text" class="form-control" id="name" name="name" 
@@ -242,6 +263,14 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" 
                                        value="<?php echo htmlspecialchars($_SESSION["email"] ?? ""); ?>" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" 
+                                       value="<?php echo htmlspecialchars($phone_number); ?>" 
+                                       placeholder="+1234567890" required>
+                                <div class="form-text">Contact number for booking confirmation</div>
                             </div>
 
                             <div class="mb-3">
@@ -260,6 +289,32 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                                 <label for="guests" class="form-label">Number of Guests</label>
                                 <input type="number" class="form-control" id="guests" name="guests" 
                                        value="<?php echo $guests > 0 ? $guests : ''; ?>" min="1" max="<?php echo $accommodation["maxGuests"]; ?>" required>
+                            </div>
+
+                            <hr class="my-4">
+                            <h6 class="mb-3">Payment Information</h6>
+
+                            <div class="mb-3">
+                                <label for="payment_method" class="form-label">Payment Method <span class="text-danger">*</span></label>
+                                <select class="form-select" id="payment_method" name="payment_method" required>
+                                    <option value="Credit Card" <?php echo $payment_method == 'Credit Card' ? 'selected' : ''; ?>>Credit Card</option>
+                                    <option value="Debit Card" <?php echo $payment_method == 'Debit Card' ? 'selected' : ''; ?>>Debit Card</option>
+                                    <option value="PayPal" <?php echo $payment_method == 'PayPal' ? 'selected' : ''; ?>>PayPal</option>
+                                    <option value="Bank Transfer" <?php echo $payment_method == 'Bank Transfer' ? 'selected' : ''; ?>>Bank Transfer</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="card_last4" class="form-label">Card Last 4 Digits</label>
+                                <input type="text" class="form-control" id="card_last4" name="card_last4" 
+                                       value="<?php echo htmlspecialchars($card_last4); ?>" 
+                                       placeholder="1234" maxlength="4" pattern="[0-9]{4}">
+                                <div class="form-text">Optional: For your records only</div>
+                            </div>
+
+                            <div class="alert alert-info mb-3">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <small>Payment details are encrypted and stored securely. This is a demo system - no actual payment processing.</small>
                             </div>
 
                             <div class="mb-3 p-3 bg-light rounded">

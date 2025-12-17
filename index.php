@@ -7,7 +7,7 @@ require "includes/dbconn.php";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="KXO205 Team" />
+    <meta name="author" content="Shengyi Shi 744564, Yuming Deng 744571, Mingxuan Xu 744580, Yanzhang Lu 744586" />
     <meta name="description" content="Find and book unique accommodations worldwide with KXO205 Booking System" />
     <title>KXO205 Accommodation Booking - Find Your Perfect Stay</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />

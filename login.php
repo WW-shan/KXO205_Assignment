@@ -1,9 +1,13 @@
 <?php
 session_start();
 require "includes/dbconn.php";
+require "includes/csrf.php";
 
 $invalidLogin = false;
 if (isset($_POST["email"]) && isset($_POST["password"])) {
+    // Verify CSRF token
+    verifyCsrfToken();
+    
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
 
@@ -58,7 +62,7 @@ function authenticate($email, $password) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="[Your Team Members' Names]" />
+    <meta name="author" content="Shengyi Shi 744564, Yuming Deng 744571, Mingxuan Xu 744580, Yanzhang Lu 744586" />
     <title>Login - KXO205 Accommodation Booking</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/bootstrap-icons.min.css" rel="stylesheet" />
@@ -78,14 +82,14 @@ function authenticate($email, $password) {
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <?php endif; ?>
-            <?php
-            // Add PHP code here to display an error message if the login attempt is invalid.
-            if($invalidLogin): ?>
-            <div id="error">
-                <p><b>Invalid username or password.<br>Please try again.</b></p>
+            <?php if($invalidLogin): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>Invalid username or password. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <?php endif ?>
+            <?php endif; ?>
           <form id="loginForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" novalidate>
+            <?php csrfTokenField(); ?>
             <div class="mb-3">
               <label for="loginEmail" class="form-label">Email</label>
               <input

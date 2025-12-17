@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "includes/dbconn.php";
+require "includes/csrf.php";
 
 // Check if user is manager
 if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
@@ -20,6 +21,9 @@ if (empty($_POST)) {
         redirect("manager.php");
     }
 } else {
+    // Verify CSRF token
+    verifyCsrfToken();
+    
     update();
     $conn->close();
     redirect("manager.php");
@@ -77,8 +81,7 @@ function update()
 
         <div class="row">
             <div class="col-md-6">
-                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=$user_id"); ?>">
-                    <div class="mb-3">
+                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=$user_id"); ?>">                    <?php csrfTokenField(); ?>                    <div class="mb-3">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="text" class="form-control" name="firstName" id="firstName" 
                                value="<?php echo htmlspecialchars($row["firstName"]); ?>" required>

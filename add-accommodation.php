@@ -93,8 +93,8 @@ function insertAccommodation()
                     <!-- Manager can select which host owns this property -->
                     <?php if ($_SESSION["role"] == "manager"): ?>
                     <div class="mb-3">
-                        <label for="host_id" class="form-label">Host</label>
-                        <select class="form-select" name="host_id" id="host_id" required>
+                        <label for="hostId" class="form-label">Host</label>
+                        <select class="form-select" name="hostId" id="hostId" required>
                             <option value="">-- Select Host --</option>
                             <?php foreach ($hosts as $host): ?>
                                 <option value="<?php echo $host["userId"]; ?>"><?php echo htmlspecialchars($host["firstName"] . " " . $host["lastName"]); ?></option>
@@ -120,13 +120,13 @@ function insertAccommodation()
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="price_per_night" class="form-label">Price per Night ($)</label>
-                            <input type="number" class="form-control" name="price_per_night" id="price_per_night" step="0.01" required>
+                            <label for="pricePerNight" class="form-label">Price per Night ($)</label>
+                            <input type="number" class="form-control" name="pricePerNight" id="pricePerNight" step="0.01" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="max_guests" class="form-label">Max Guests</label>
-                            <input type="number" class="form-control" name="max_guests" id="max_guests" required>
+                            <label for="maxGuests" class="form-label">Max Guests</label>
+                            <input type="number" class="form-control" name="maxGuests" id="maxGuests" required>
                         </div>
                     </div>
 
@@ -148,33 +148,33 @@ function insertAccommodation()
                     </div>
 
                     <div class="mb-3">
-                        <label for="image_path" class="form-label">Image Path</label>
-                        <input type="text" class="form-control" name="image_path" id="image_path" placeholder="e.g., img/house1.avif" required>
+                        <label for="imagePath" class="form-label">Image Path</label>
+                        <input type="text" class="form-control" name="imagePath" id="imagePath" placeholder="e.g., img/house1.avif" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Features</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="allow_smoking" id="allow_smoking" value="1">
-                            <label class="form-check-label" for="allow_smoking">
+                            <input class="form-check-input" type="checkbox" name="allowSmoking" id="allowSmoking" value="1">
+                            <label class="form-check-label" for="allowSmoking">
                                 Allow Smoking
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="has_garage" id="has_garage" value="1">
-                            <label class="form-check-label" for="has_garage">
+                            <input class="form-check-input" type="checkbox" name="hasGarage" id="hasGarage" value="1">
+                            <label class="form-check-label" for="hasGarage">
                                 Has Garage
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="pet_friendly" id="pet_friendly" value="1">
-                            <label class="form-check-label" for="pet_friendly">
+                            <input class="form-check-input" type="checkbox" name="petFriendly" id="petFriendly" value="1">
+                            <label class="form-check-label" for="petFriendly">
                                 Pet Friendly
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="has_internet" id="has_internet" value="1">
-                            <label class="form-check-label" for="has_internet">
+                            <input class="form-check-input" type="checkbox" name="hasInternet" id="hasInternet" value="1">
+                            <label class="form-check-label" for="hasInternet">
                                 Has Internet
                             </label>
                         </div>

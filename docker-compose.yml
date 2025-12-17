@@ -32,9 +32,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./:/var/www/html
       - ./php.ini:/usr/local/etc/php/php.ini
       - ./includes/dbconn_docker.php:/var/www/html/includes/dbconn.php
+      - ./:/var/www/html
     networks:
       - kxo205_network
     build:

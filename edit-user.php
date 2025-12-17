@@ -36,7 +36,7 @@ function select()
     global $conn;
     global $user_id;
 
-    $sql = "SELECT * FROM USERS WHERE userId = $user_id;";
+    $sql = "SELECT * FROM USER WHERE userId = $user_id;";
     $result = $conn->query($sql);
     return $result ? $result->fetch_assoc() : null;
 }
@@ -53,7 +53,7 @@ function update()
     $postalAddress = htmlspecialchars($_POST["postalAddress"]);
     $role = htmlspecialchars($_POST["role"]);
 
-    $sql = "UPDATE USERS SET firstName='$firstName', lastName='$lastName', email='$email', phoneNumber='$phoneNumber', postalAddress='$postalAddress', role='$role' WHERE userId=$user_id;";
+    $sql = "UPDATE USER SET firstName='$firstName', lastName='$lastName', email='$email', phoneNumber='$phoneNumber', postalAddress='$postalAddress', role='$role' WHERE userId=$user_id;";
     return $conn->query($sql);
 }
 ?>

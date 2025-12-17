@@ -38,7 +38,7 @@ function authenticate($email, $password) {
     $email = $conn->real_escape_string($email);
     $password = $conn->real_escape_string($password);
 
-    $sql = "SELECT userId, password, role, firstName, email FROM USERS WHERE email = \"$email\"";
+    $sql = "SELECT userId, password, role, firstName, email FROM USER WHERE email = \"$email\"";
     if ($result = $conn->query($sql)) {
         // Should only get one row returned
         if ($result->num_rows === 1) {

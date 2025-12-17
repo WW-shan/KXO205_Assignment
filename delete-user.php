@@ -22,7 +22,7 @@ if ($user_id == $_SESSION["userId"]) {
 }
 
 // Delete user
-$sql = "DELETE FROM USERS WHERE userId = $user_id;";
+$sql = "DELETE FROM USER WHERE userId = $user_id;";
 $conn->query($sql);
 $conn->close();
 header("Location: manager.php");

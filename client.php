@@ -46,9 +46,9 @@ $user_id = $_SESSION["userId"];
           </thead>
           <tbody>
             <?php
-            $sql = "SELECT b.*, a.name, u.firstName, u.lastName FROM BOOKINGS b 
-                    JOIN ACCOMMODATIONS a ON b.accommodationId = a.accommodationId 
-                    JOIN USERS u ON a.hostId = u.userId 
+                $sql = "SELECT b.*, a.name, u.firstName, u.lastName FROM BOOKING b 
+                  JOIN ACCOMMODATION a ON b.accommodationId = a.accommodationId 
+                  JOIN USER u ON a.hostId = u.userId 
                     WHERE b.userId = $user_id;";
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {

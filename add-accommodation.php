@@ -30,7 +30,7 @@ function fetchHosts()
 {
     global $conn;
     $data = [];
-    $sql = "SELECT userId, firstName, lastName FROM USERS WHERE role = 'host' ORDER BY firstName;";
+    $sql = "SELECT userId, firstName, lastName FROM USER WHERE role = 'host' ORDER BY firstName;";
     $result = $conn->query($sql);
     if ($result && $result->num_rows > 0) {
         while ($host = $result->fetch_assoc()) {
@@ -64,7 +64,7 @@ function insertAccommodation()
     // If manager is adding, use the hostId from form, otherwise use logged-in user
     $hostId = $_SESSION["role"] == "manager" ? htmlspecialchars($_POST["hostId"]) : $_SESSION["userId"];
 
-    $sql = "INSERT INTO ACCOMMODATIONS (hostId, name, address, city, pricePerNight, bedrooms, bathrooms, maxGuests, description, imagePath, allowSmoking, hasGarage, petFriendly, hasInternet) 
+    $sql = "INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, bedrooms, bathrooms, maxGuests, description, imagePath, allowSmoking, hasGarage, petFriendly, hasInternet) 
             VALUES ($hostId, '$name', '$address', '$city', $pricePerNight, $bedrooms, $bathrooms, $maxGuests, '$description', '$imagePath', $allowSmoking, $hasGarage, $petFriendly, $hasInternet);";
     return $conn->query($sql);
 }

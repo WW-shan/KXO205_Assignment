@@ -36,7 +36,7 @@ function select()
     global $conn;
     global $accommodation_id;
 
-    $sql = "SELECT * FROM ACCOMMODATIONS WHERE accommodationId = $accommodation_id;";
+    $sql = "SELECT * FROM ACCOMMODATION WHERE accommodationId = $accommodation_id;";
     $result = $conn->query($sql);
     return $result ? $result->fetch_assoc() : null;
 }
@@ -59,7 +59,7 @@ function update()
     $hasGarage = isset($_POST["hasGarage"]) ? 1 : 0;
     $petFriendly = isset($_POST["petFriendly"]) ? 1 : 0;
     $hasInternet = isset($_POST["hasInternet"]) ? 1 : 0;
-    $sql = "UPDATE ACCOMMODATIONS SET name='$name', address='$address', city='$city', pricePerNight='$pricePerNight', bedrooms='$bedrooms', bathrooms='$bathrooms', maxGuests='$maxGuests', description='$description', imagePath='$imagePath', allowSmoking=$allowSmoking, hasGarage=$hasGarage, petFriendly=$petFriendly, hasInternet=$hasInternet WHERE accommodationId=$accommodation_id;";
+    $sql = "UPDATE ACCOMMODATION SET name='$name', address='$address', city='$city', pricePerNight='$pricePerNight', bedrooms='$bedrooms', bathrooms='$bathrooms', maxGuests='$maxGuests', description='$description', imagePath='$imagePath', allowSmoking=$allowSmoking, hasGarage=$hasGarage, petFriendly=$petFriendly, hasInternet=$hasInternet WHERE accommodationId=$accommodation_id;";
     return $conn->query($sql);
 }
 ?>

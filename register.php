@@ -14,7 +14,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
 
   $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-  $sql = "INSERT INTO USERS (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES (
+  $sql = "INSERT INTO USER (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES (
     \"$email\", \"$hashedPassword\", \"$firstName\", \"$lastName\", \"$mobile\", \"$postalAddress\", \"$role\", " . ($role === "host" ? "\"$abn\"" : "NULL") . "
   )";
   

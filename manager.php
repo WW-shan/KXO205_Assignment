@@ -47,7 +47,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
             <?php
             require "includes/dbconn.php";
 
-            $sql = "SELECT * FROM USERS;";
+            $sql = "SELECT * FROM USER;";
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -96,7 +96,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
           </thead>
           <tbody>
             <?php
-            $sql = "SELECT a.*, u.firstName, u.lastName FROM ACCOMMODATIONS a JOIN USERS u ON a.hostId = u.userId;";
+            $sql = "SELECT a.*, u.firstName, u.lastName FROM ACCOMMODATION a JOIN USER u ON a.hostId = u.userId;";
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -137,7 +137,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
           </thead>
           <tbody>
             <?php
-            $sql = "SELECT b.*, u.firstName, u.lastName, a.name FROM BOOKINGS b JOIN USERS u ON b.userId = u.userId JOIN ACCOMMODATIONS a ON b.accommodationId = a.accommodationId;";
+            $sql = "SELECT b.*, u.firstName, u.lastName, a.name FROM BOOKING b JOIN USER u ON b.userId = u.userId JOIN ACCOMMODATION a ON b.accommodationId = a.accommodationId;";
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {

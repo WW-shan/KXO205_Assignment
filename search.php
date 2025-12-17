@@ -53,12 +53,12 @@ function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
 {
     $results = [];
     $sql = "SELECT a.*, u.firstName, u.lastName, u.phoneNumber, u.email
-                    FROM ACCOMMODATIONS a
-                    JOIN USERS u ON a.hostId = u.userId
+                    FROM ACCOMMODATION a
+                    JOIN USER u ON a.hostId = u.userId
                     WHERE a.city LIKE ?
                         AND a.maxGuests >= ?
                         AND a.accommodationId NOT IN (
-                                SELECT accommodationId FROM BOOKINGS
+                                SELECT accommodationId FROM BOOKING
                                 WHERE (checkInDate < ? AND checkOutDate > ?)
                                     AND status = 'confirmed'
                         )";

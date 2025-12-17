@@ -70,9 +70,9 @@ require "includes/dbconn.php";
           <div class="row">
             <?php
             // Fetch featured accommodations from database
-            $featured_sql = "SELECT a.*, u.firstName, u.lastName FROM ACCOMMODATIONS a 
-                           JOIN USERS u ON a.hostId = u.userId 
-                           LIMIT 6";
+            $featured_sql = "SELECT a.*, u.firstName, u.lastName FROM ACCOMMODATION a 
+                           JOIN USER u ON a.hostId = u.userId 
+                            LIMIT 6";
             $featured_result = $conn->query($featured_sql);
             
             if ($featured_result && $featured_result->num_rows > 0) {

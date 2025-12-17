@@ -32,13 +32,13 @@ function redirect($url)
 
 function cancelClientBooking($conn, $bookingId, $userId)
 {
-    $sql = "DELETE FROM BOOKINGS WHERE bookingId = $bookingId AND userId = $userId;";
+    $sql = "DELETE FROM BOOKING WHERE bookingId = $bookingId AND userId = $userId;";
     return $conn->query($sql);
 }
 
 function cancelAnyBooking($conn, $bookingId)
 {
-    $sql = "DELETE FROM BOOKINGS WHERE bookingId = $bookingId;";
+    $sql = "DELETE FROM BOOKING WHERE bookingId = $bookingId;";
     return $conn->query($sql);
 }
 ?>

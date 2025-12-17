@@ -60,7 +60,7 @@ function redirect($url)
 
 function fetchAccommodation($conn, $accommodation_id)
 {
-    $sql = "SELECT * FROM ACCOMMODATIONS WHERE accommodationId = $accommodation_id;";
+    $sql = "SELECT * FROM ACCOMMODATION WHERE accommodationId = $accommodation_id;";
     $result = $conn->query($sql);
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -90,7 +90,7 @@ function validateBooking($accommodation, $check_in, $check_out, $guests)
 
 function hasConflict($conn, $accommodation_id, $check_in, $check_out)
 {
-    $conflict_sql = "SELECT COUNT(*) as count FROM BOOKINGS 
+    $conflict_sql = "SELECT COUNT(*) as count FROM BOOKING 
                     WHERE accommodationId = $accommodation_id 
                     AND status = 'confirmed'
                     AND (checkInDate < '$check_out' AND checkOutDate > '$check_in');";
@@ -111,7 +111,7 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
     $total_price = $price_per_night * $nights;
     $payment_details = "Payment processed";
 
-    $insert_sql = "INSERT INTO BOOKINGS (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) 
+    $insert_sql = "INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) 
                   VALUES ($user_id, $accommodation_id, '$check_in', '$check_out', $guests, $total_price, '$payment_details', 'confirmed');";
 
     return $conn->query($insert_sql);

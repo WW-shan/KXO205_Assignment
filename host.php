@@ -50,7 +50,7 @@ $host_id = $_SESSION["userId"];
           </thead>
           <tbody>
             <?php
-            $sql = "SELECT * FROM ACCOMMODATIONS WHERE hostId = $host_id;";
+            $sql = "SELECT * FROM ACCOMMODATION WHERE hostId = $host_id;";
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -94,9 +94,9 @@ $host_id = $_SESSION["userId"];
           </thead>
           <tbody>
             <?php
-            $sql = "SELECT b.*, a.name, u.firstName, u.lastName FROM BOOKINGS b 
-                    JOIN ACCOMMODATIONS a ON b.accommodationId = a.accommodationId 
-                    JOIN USERS u ON b.userId = u.userId 
+                $sql = "SELECT b.*, a.name, u.firstName, u.lastName FROM BOOKING b 
+                  JOIN ACCOMMODATION a ON b.accommodationId = a.accommodationId 
+                  JOIN USER u ON b.userId = u.userId 
                     WHERE a.hostId = $host_id;";
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {

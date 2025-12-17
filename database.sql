@@ -6,12 +6,12 @@ CREATE DATABASE IF NOT EXISTS KXO205;
 USE KXO205;
 
 -- Drop existing tables (Order matters due to foreign keys)
-DROP TABLE IF EXISTS BOOKINGS;
-DROP TABLE IF EXISTS ACCOMMODATIONS;
-DROP TABLE IF EXISTS USERS;
+DROP TABLE IF EXISTS BOOKING;
+DROP TABLE IF EXISTS ACCOMMODATION;
+DROP TABLE IF EXISTS USER;
 
--- Create USERS table
-CREATE TABLE USERS (
+-- Create USER table
+CREATE TABLE USER (
     userId INT AUTO_INCREMENT,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL, -- Stores hashed password
@@ -25,8 +25,8 @@ CREATE TABLE USERS (
     PRIMARY KEY (userId)
 ) ENGINE=InnoDB;
 
--- Create ACCOMMODATIONS table
-CREATE TABLE ACCOMMODATIONS (
+-- Create ACCOMMODATION table
+CREATE TABLE ACCOMMODATION (
     accommodationId INT AUTO_INCREMENT,
     hostId INT NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -44,11 +44,11 @@ CREATE TABLE ACCOMMODATIONS (
     hasInternet BOOLEAN DEFAULT 0,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (accommodationId),
-    FOREIGN KEY (hostId) REFERENCES USERS(userId) ON DELETE CASCADE
+    FOREIGN KEY (hostId) REFERENCES USER(userId) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Create BOOKINGS table
-CREATE TABLE BOOKINGS (
+-- Create BOOKING table
+CREATE TABLE BOOKING (
     bookingId INT AUTO_INCREMENT,
     userId INT NOT NULL,
     accommodationId INT NOT NULL,
@@ -60,14 +60,14 @@ CREATE TABLE BOOKINGS (
     status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (bookingId),
-    FOREIGN KEY (userId) REFERENCES USERS(userId),
-    FOREIGN KEY (accommodationId) REFERENCES ACCOMMODATIONS(accommodationId)
+    FOREIGN KEY (userId) REFERENCES USER(userId),
+    FOREIGN KEY (accommodationId) REFERENCES ACCOMMODATION(accommodationId)
 ) ENGINE=InnoDB;
 
 -- Insert Sample Data
 
 -- Users
-INSERT INTO USERS (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES
+INSERT INTO USER (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES
 ('manager@kxo205.com', '$2y$10$DummyHashForManager', 'System', 'Manager', '0400000000', '1 Manager Street, Sydney NSW 2000', 'manager', NULL),
 ('host1@kxo205.com', '$2y$10$DummyHashForHost1', 'John', 'Host', '0411111111', '123 Ocean Drive, Sydney NSW 2026', 'host', '12345678901'),
 ('host2@kxo205.com', '$2y$10$DummyHashForHost2', 'Jane', 'Owner', '0422222222', '456 CBD Street, Melbourne VIC 3000', 'host', '98765432109'),
@@ -77,7 +77,7 @@ INSERT INTO USERS (email, password, firstName, lastName, phoneNumber, postalAddr
 ('client2@kxo205.com', '$2y$10$DummyHashForClient2', 'Bob', 'Guest', '0444444444', '101 Guest Road, Melbourne VIC 3001', 'client', NULL);
 
 -- Accommodations
-INSERT INTO ACCOMMODATIONS (hostId, name, address, city, pricePerNight, maxGuests, bedrooms, bathrooms, description, imagePath, allowSmoking, hasGarage, petFriendly, hasInternet) VALUES
+INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, maxGuests, bedrooms, bathrooms, description, imagePath, allowSmoking, hasGarage, petFriendly, hasInternet) VALUES
 (2, 'Beachfront Villa', '123 Ocean Drive', 'Sydney', 350.00, 8, 4, 3, 'Stunning beachfront villa with direct ocean access.', 'img/house1.avif', 0, 1, 1, 1),
 (2, 'City Center Luxury Apartment', '456 CBD Street', 'Melbourne', 220.00, 4, 2, 2, 'Modern apartment in the heart of the city.', 'img/house2.avif', 0, 1, 0, 1),
 (3, 'Cozy Mountain Cabin', '789 Mountain View', 'Blue Mountains', 180.00, 6, 3, 2, 'Escape to nature in this cozy cabin.', 'img/house3.avif', 1, 0, 1, 0),
@@ -94,7 +94,7 @@ INSERT INTO ACCOMMODATIONS (hostId, name, address, city, pricePerNight, maxGuest
 (5, 'Skyline Apartment', '200 St Georges Tce', 'Perth', 310.00, 4, 2, 2, 'High-floor apartment with skyline views.', 'img/house2.avif', 0, 1, 0, 1);
 
 -- Bookings
-INSERT INTO BOOKINGS (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) VALUES
+INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, totalPrice, paymentDetails, status) VALUES
 (4, 1, '2025-11-15', '2025-11-18', 4, 1050.00, 'EncryptedDataHere', 'confirmed'),
 (4, 2, '2025-12-24', '2025-12-28', 2, 880.00, 'EncryptedDataHere', 'confirmed'),
 (5, 5, '2025-09-01', '2025-09-05', 2, 600.00, 'EncryptedDataHere', 'confirmed'),

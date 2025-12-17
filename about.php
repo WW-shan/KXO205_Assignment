@@ -116,19 +116,226 @@
           </div>
 
           <!-- User Guide Cards -->
+          <div class="card shadow-sm mb-5" id="user-guide">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0"><i class="bi bi-book me-2"></i>4.1 User Guide - How to Use This Website</h4>
+            </div>
+            <div class="card-body">
+              <p class="lead mb-4">Welcome to KXO205 Accommodation Booking System! This guide will help you navigate the platform and make the most of its features.</p>
+
+              <!-- Role-based Guides -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <h5 class="text-primary mb-3"><i class="bi bi-person-circle me-2"></i>Getting Started</h5>
+                  <div class="alert alert-info">
+                    <strong>First Time User?</strong> Start by registering an account. Choose your role based on your needs:
+                    <ul class="mt-2 mb-0">
+                      <li><strong>Client</strong> - If you want to search and book accommodations</li>
+                      <li><strong>Host</strong> - If you want to list your properties for booking</li>
+                      <li><strong>Manager</strong> - For administrative access (requires approval)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Client Guide -->
+              <div class="accordion mb-4" id="userGuideAccordion">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClient" aria-expanded="true">
+                      <i class="bi bi-search me-2 text-success"></i>
+                      <strong>For Clients: How to Search and Book Accommodations</strong>
+                    </button>
+                  </h2>
+                  <div id="collapseClient" class="accordion-collapse collapse show" data-bs-parent="#userGuideAccordion">
+                    <div class="accordion-body">
+                      <h6 class="text-success mb-3">Step 1: Search for Accommodations</h6>
+                      <ol class="mb-4">
+                        <li>Navigate to the homepage or click <strong>"Accommodations"</strong> in the navigation bar</li>
+                        <li>Enter your destination city (e.g., "Sydney", "Melbourne")</li>
+                        <li>Select your <strong>check-in</strong> and <strong>check-out</strong> dates</li>
+                        <li>Specify the number of guests</li>
+                        <li>Click the <strong>"Search"</strong> button</li>
+                      </ol>
+
+                      <h6 class="text-success mb-3">Step 2: Review Search Results</h6>
+                      <ul class="mb-4">
+                        <li>Browse available properties matching your criteria</li>
+                        <li>View amenities (WiFi, Garage, Pet Friendly, etc.) displayed as badges</li>
+                        <li>Check price per night and total cost for your stay</li>
+                        <li>Review property details: bedrooms, bathrooms, max guests</li>
+                      </ul>
+
+                      <h6 class="text-success mb-3">Step 3: Make a Booking</h6>
+                      <ol class="mb-4">
+                        <li>Click <strong>"Book Now"</strong> on your chosen property</li>
+                        <li>If not logged in, you'll be redirected to the login page - sign in or register</li>
+                        <li>Review the booking summary (accommodation details, dates, total cost)</li>
+                        <li>Enter your <strong>phone number</strong> for booking confirmation</li>
+                        <li>Verify your check-in/out dates (you can modify them if needed - total cost updates automatically)</li>
+                        <li>Select a <strong>payment method</strong> (Credit Card, Debit Card, PayPal, Bank Transfer)</li>
+                        <li>Optionally enter the last 4 digits of your card for your records</li>
+                        <li>Click <strong>"Confirm Booking"</strong></li>
+                      </ol>
+
+                      <h6 class="text-success mb-3">Step 4: Manage Your Bookings</h6>
+                      <ul class="mb-0">
+                        <li>Access your <strong>Client Dashboard</strong> from the navigation menu</li>
+                        <li>View all your bookings with status (Confirmed, Cancelled, Completed)</li>
+                        <li>See booking details: accommodation name, dates, guests, total price</li>
+                        <li>Cancel bookings if needed (click the Cancel button with CSRF protection)</li>
+                        <li>View payment information (encrypted and securely stored)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHost">
+                      <i class="bi bi-house-door me-2 text-info"></i>
+                      <strong>For Hosts: How to List and Manage Properties</strong>
+                    </button>
+                  </h2>
+                  <div id="collapseHost" class="accordion-collapse collapse" data-bs-parent="#userGuideAccordion">
+                    <div class="accordion-body">
+                      <h6 class="text-info mb-3">Step 1: Add a New Property</h6>
+                      <ol class="mb-4">
+                        <li>Log in as a <strong>Host</strong></li>
+                        <li>Go to your <strong>Host Dashboard</strong></li>
+                        <li>Click <strong>"Add New Property"</strong></li>
+                        <li>Fill in property details:
+                          <ul>
+                            <li>Property name and address</li>
+                            <li>City location</li>
+                            <li>Price per night</li>
+                            <li>Number of bedrooms and bathrooms</li>
+                            <li>Maximum guests allowed</li>
+                            <li>Property description</li>
+                            <li>Image path (e.g., img/house1.avif)</li>
+                          </ul>
+                        </li>
+                        <li>Select amenities: Smoking Allowed, Garage, Pet Friendly, Internet, Air Conditioning, Pool, Kitchen, Washer/Dryer</li>
+                        <li>Click <strong>"Add Property"</strong></li>
+                      </ol>
+
+                      <h6 class="text-info mb-3">Step 2: Manage Your Properties</h6>
+                      <ul class="mb-4">
+                        <li>View all your listed properties in the Host Dashboard</li>
+                        <li>See booking statistics for each property</li>
+                        <li>Edit property details by clicking the <strong>"Edit"</strong> button</li>
+                        <li>Update amenities to attract more bookings</li>
+                        <li>Delete properties that are no longer available</li>
+                      </ul>
+
+                      <h6 class="text-info mb-3">Step 3: Track Bookings</h6>
+                      <ul class="mb-0">
+                        <li>View all bookings for your properties</li>
+                        <li>See guest information and contact details</li>
+                        <li>Monitor booking dates and status</li>
+                        <li>Check payment information for confirmed bookings</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseManager">
+                      <i class="bi bi-gear me-2 text-warning"></i>
+                      <strong>For Managers: Administrative Functions</strong>
+                    </button>
+                  </h2>
+                  <div id="collapseManager" class="accordion-collapse collapse" data-bs-parent="#userGuideAccordion">
+                    <div class="accordion-body">
+                      <h6 class="text-warning mb-3">User Management</h6>
+                      <ul class="mb-4">
+                        <li>View all users (Clients, Hosts, Managers) in the system</li>
+                        <li>Edit user information and roles</li>
+                        <li>Delete user accounts when necessary</li>
+                        <li>Monitor user activity and booking history</li>
+                      </ul>
+
+                      <h6 class="text-warning mb-3">Accommodation Management</h6>
+                      <ul class="mb-4">
+                        <li>View all accommodations across all hosts</li>
+                        <li>Add new accommodations on behalf of hosts</li>
+                        <li>Edit any accommodation details</li>
+                        <li>Remove inappropriate or inactive listings</li>
+                      </ul>
+
+                      <h6 class="text-warning mb-3">Booking Oversight</h6>
+                      <ul class="mb-0">
+                        <li>Monitor all bookings system-wide</li>
+                        <li>View booking statistics and trends</li>
+                        <li>Handle booking disputes or cancellations</li>
+                        <li>Access payment information for auditing</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Key Features -->
+              <div class="row g-3 mt-4">
+                <div class="col-12">
+                  <h5 class="text-primary mb-3"><i class="bi bi-star me-2"></i>Key Features to Know</h5>
+                </div>
+                <div class="col-md-6">
+                  <div class="card h-100 border-success">
+                    <div class="card-body">
+                      <h6 class="card-title text-success"><i class="bi bi-shield-check me-2"></i>Security Features</h6>
+                      <ul class="small mb-0">
+                        <li><strong>CSRF Protection</strong> - All forms are protected against Cross-Site Request Forgery attacks</li>
+                        <li><strong>Password Encryption</strong> - Passwords are hashed using bcrypt</li>
+                        <li><strong>Payment Encryption</strong> - Payment details are encrypted with AES-256-CBC</li>
+                        <li><strong>XSS Prevention</strong> - All user inputs are sanitized before display</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card h-100 border-info">
+                    <div class="card-body">
+                      <h6 class="card-title text-info"><i class="bi bi-magic me-2"></i>Smart Features</h6>
+                      <ul class="small mb-0">
+                        <li><strong>Real-time Price Calculation</strong> - Total cost updates automatically when you change dates</li>
+                        <li><strong>Conflict Prevention</strong> - System prevents double-booking the same property</li>
+                        <li><strong>Dark Mode</strong> - Toggle between light and dark themes (saved preference)</li>
+                        <li><strong>Responsive Design</strong> - Works seamlessly on desktop, tablet, and mobile</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Troubleshooting -->
+              <div class="alert alert-secondary mt-4">
+                <h6 class="alert-heading"><i class="bi bi-question-circle me-2"></i>Need Help?</h6>
+                <ul class="mb-0">
+                  <li><strong>Can't find accommodations?</strong> Try different dates or a nearby city</li>
+                  <li><strong>Booking failed?</strong> The dates may have been taken by another user - try different dates</li>
+                  <li><strong>Forgot password?</strong> Contact the system administrator</li>
+                  <li><strong>Issues with property listing?</strong> Ensure all required fields are filled correctly</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Original Quick Guide Cards (kept for visual variety) -->
           <div class="row mb-5">
             <div class="col-md-6 mb-4">
               <div class="card shadow-sm h-100">
                 <div class="card-header bg-success text-white">
-                  <h4 class="mb-0"><i class="bi bi-search me-2"></i>How to Search</h4>
+                  <h4 class="mb-0"><i class="bi bi-search me-2"></i>Quick Guide: Search</h4>
                 </div>
                 <div class="card-body">
                   <ol class="user-guide-steps">
                     <li>Click the "Accommodations" link in the top navigation bar</li>
                     <li>Enter your destination, check-in, and check-out dates</li>
                     <li>Specify the number of guests</li>
-                    <li>Use filters to narrow down your search (price range, amenities, property type)</li>
-                    <li>Review the search results and select the property you like</li>
+                    <li>Review the search results with amenities displayed as badges</li>
+                    <li>Check property details and pricing</li>
                   </ol>
                 </div>
               </div>
@@ -137,17 +344,22 @@
             <div class="col-md-6 mb-4">
               <div class="card shadow-sm h-100">
                 <div class="card-header bg-info text-white">
-                  <h4 class="mb-0"><i class="bi bi-calendar-check me-2"></i>How to Book</h4>
+                  <h4 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Quick Guide: Book</h4>
                 </div>
                 <div class="card-body">
                   <ol class="user-guide-steps">
                     <li>Select your desired property from the search results</li>
-                    <li>Review property details, amenities, and host information</li>
-                    <li>Verify check-in/check-out dates and number of guests</li>
+                    <li>Review property details and amenities</li>
+                    <li>Verify check-in/check-out dates and guests (adjustable)</li>
                     <li>Click the "Book Now" button</li>
-                    <li>Log in to your account or register if you're a new user</li>
-                    <li>Confirm your booking details and payment information</li>
-                    <li>Receive booking confirmation and manage your reservations from your dashboard</li>
+                    <li>Log in to your account or register</li>
+                    <li>Enter phone number and payment information</li>
+                    <li>Confirm booking and manage from your dashboard</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
                   </ol>
                 </div>
               </div>

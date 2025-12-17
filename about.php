@@ -926,36 +926,44 @@ cd KXO205_Assignment</code></pre>
     </main>
 
     <!-- Footer Section -->
-    <footer class="bg-light py-5 mt-5">
+    <footer class="bg-dark text-white py-5 mt-5">
       <div class="container">
         <div class="row">
-          <div class="col-12 col-md-3 mb-3">
-            <h5><i class="bi bi-house-heart-fill me-2" style="font-size: 24px"></i>KXO205</h5>
-            <small class="text-muted">Full-Stack Accommodation Platform</small>
-            <p class="mt-3 text-muted small">&copy; 2025 KXO205 Accommodation<br>Swinburne University Project</p>
+          <div class="col-12 col-md-4 mb-4">
+            <h5 class="mb-3"><i class="bi bi-house-heart-fill me-2" style="font-size: 24px"></i>KXO205</h5>
+            <p class="text-white">Full-Stack Accommodation Booking Platform</p>
+            <p class="text-white-50">A comprehensive solution for booking and managing accommodations worldwide.</p>
           </div>
-          <div class="col-6 col-md-3 mb-3">
-            <h6 class="text-uppercase fw-bold">Features</h6>
+          <div class="col-12 col-md-2 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Quick Links</h6>
             <ul class="list-unstyled">
-              <li><a class="text-decoration-none text-muted" href="index.php#featured-accommodations">Featured Properties</a></li>
-              <li><a class="text-decoration-none text-muted" href="search.php">Search & Book</a></li>
-              <li><a class="text-decoration-none text-muted" href="about.php#team-collaboration">Team Roles</a></li>
+              <li><a class="text-decoration-none text-light hover-link" href="index.php">Home</a></li>
+              <li><a class="text-decoration-none text-light hover-link" href="search.php">Search</a></li>
+              <li><a class="text-decoration-none text-light hover-link" href="about.php">About</a></li>
             </ul>
           </div>
-          <div class="col-6 col-md-3 mb-3">
-            <h6 class="text-uppercase fw-bold">Resources</h6>
+          <div class="col-12 col-md-2 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">For Users</h6>
             <ul class="list-unstyled">
-              <li><a class="text-decoration-none text-muted" href="about.php#resources">Resources & Credits</a></li>
-              <li><a class="text-decoration-none text-muted" href="about.php#development-challenges">Challenges</a></li>
-              <li><a class="text-decoration-none text-muted" href="README.md">Documentation</a></li>
+              <li><a class="text-decoration-none text-light hover-link" href="login.php">Login</a></li>
+              <li><a class="text-decoration-none text-light hover-link" href="register.php">Register</a></li>
+              <li><a class="text-decoration-none text-light hover-link" href="search.php">Find Stay</a></li>
             </ul>
           </div>
-          <div class="col-6 col-md-3 mb-3">
-            <h6 class="text-uppercase fw-bold">About</h6>
-            <ul class="list-unstyled">
-              <li><a class="text-decoration-none text-muted" href="about.php#our-team">Our Team</a></li>
-              <li><a class="text-decoration-none text-muted" href="about.php">About Project</a></li>
-            </ul>
+          <div class="col-12 col-md-4 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Project Info</h6>
+            <p class="text-white-50 small">
+              <strong class="text-white">Course:</strong> KXO205<br>
+              <strong class="text-white">Institution:</strong> Tasmania University<br>
+              <strong class="text-white">Year:</strong> 2025
+            </p>
+          </div>
+        </div>
+        <hr class="bg-secondary">
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="text-muted small mb-0">&copy; 2025 KXO205 Accommodation Platform. All rights reserved.</p>
+            <p class="text-muted small">Developed by: Shengyi Shi (744564) | Yuming Deng (744571) | Mingxuan Xu (744580) | Yanzhang Lu (744586)</p>
           </div>
         </div>
       </div>

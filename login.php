@@ -122,6 +122,15 @@ function authenticate($email, $password) {
               Don't have an account? <a href="register.php">Register Now</a>
             </p>
           </form>
+
+          <!-- Default Credentials Section -->
+          <div class="mt-5 p-3 bg-info bg-opacity-10 border border-info rounded">
+            <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Demo Credentials</h5>
+            <p class="mb-2" style="font-size: 1.1rem;"><strong>Manager:</strong> <code>manager@kxo205.com</code></p>
+            <p class="mb-2" style="font-size: 1.1rem;"><strong>Host:</strong> <code>host1@kxo205.com</code></p>
+            <p class="mb-2" style="font-size: 1.1rem;"><strong>Client:</strong> <code>client1@kxo205.com</code></p>
+            <p class="mb-0" style="font-size: 1.1rem;"><strong>Password (all):</strong> <code>Password123!</code></p>
+          </div>
         </div>
       </div>
     </main>

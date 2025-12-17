@@ -73,6 +73,21 @@ function fetchAccommodation($conn, $accommodation_id)
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $result->free();
+        
+        // Fetch amenities for this accommodation
+        $amenitySql = "SELECT am.name, am.icon 
+                      FROM AMENITY am
+                      JOIN ACCOMMODATION_AMENITY aa ON am.amenityId = aa.amenityId
+                      WHERE aa.accommodationId = $accommodation_id";
+        $amenityResult = $conn->query($amenitySql);
+        $row['amenities'] = [];
+        if ($amenityResult) {
+            while ($amenity = $amenityResult->fetch_assoc()) {
+                $row['amenities'][] = $amenity;
+            }
+            $amenityResult->free();
+        }
+        
         return $row;
     }
     return null;
@@ -201,17 +216,13 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                         <div class="mb-3">
                             <h6>Features</h6>
                             <div>
-                                <?php if ($accommodation["allowSmoking"]): ?>
-                                    <span class="badge bg-info me-2"><i class="bi bi-tornado"></i> Smoking</span>
-                                <?php endif; ?>
-                                <?php if ($accommodation["hasGarage"]): ?>
-                                    <span class="badge bg-secondary me-2"><i class="bi bi-car-front"></i> Garage</span>
-                                <?php endif; ?>
-                                <?php if ($accommodation["petFriendly"]): ?>
-                                    <span class="badge bg-success me-2"><i class="bi bi-heart"></i> Pet Friendly</span>
-                                <?php endif; ?>
-                                <?php if ($accommodation["hasInternet"]): ?>
-                                    <span class="badge bg-warning text-dark"><i class="bi bi-wifi"></i> Internet</span>
+                                <?php if (!empty($accommodation['amenities'])): ?>
+                                    <?php foreach ($accommodation['amenities'] as $amenity): ?>
+                                        <span class="badge bg-secondary me-1 mb-1">
+                                            <i class="<?php echo htmlspecialchars($amenity['icon']); ?>"></i> 
+                                            <?php echo htmlspecialchars($amenity['name']); ?>
+                                        </span>
+                                    <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -312,9 +323,14 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                                 <div class="form-text">Optional: For your records only</div>
                             </div>
 
-                            <div class="alert alert-info mb-3">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <small>Payment details are encrypted and stored securely. This is a demo system - no actual payment processing.</small>
+                            <div class="alert alert-warning mb-3 border-2 border-warning">
+                                <h6 class="alert-heading mb-2">
+                                    <i class="bi bi-shield-lock-fill me-2"></i>Security Notice
+                                </h6>
+                                <p class="mb-0">
+                                    <strong>Payment details are encrypted and stored securely.</strong><br>
+                                    <em>This is a demo system - no actual payment processing occurs.</em>
+                                </p>
                             </div>
 
                             <div class="mb-3 p-3 bg-light rounded">

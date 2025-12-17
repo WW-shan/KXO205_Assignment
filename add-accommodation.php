@@ -9,9 +9,11 @@ if (!isset($_SESSION["role"]) || ($_SESSION["role"] != "host" && $_SESSION["role
 }
 
 $hosts = [];
+$allAmenities = [];
 if ($_SESSION["role"] == "manager") {
     $hosts = fetchHosts();
 }
+$allAmenities = fetchAllAmenities();
 
 if (empty($_POST)) {
     // show form
@@ -47,6 +49,23 @@ function fetchHosts()
     return $data;
 }
 
+function fetchAllAmenities()
+{
+    global $conn;
+    $data = [];
+    $sql = "SELECT amenityId, name, icon FROM AMENITY ORDER BY amenityId;";
+    $result = $conn->query($sql);
+    if ($result && $result->num_rows > 0) {
+        while ($amenity = $result->fetch_assoc()) {
+            $data[] = $amenity;
+        }
+    }
+    if ($result) {
+        $result->free();
+    }
+    return $data;
+}
+
 function insertAccommodation()
 {
     global $conn;
@@ -60,17 +79,28 @@ function insertAccommodation()
     $maxGuests = htmlspecialchars($_POST["maxGuests"]);
     $description = htmlspecialchars($_POST["description"]);
     $imagePath = htmlspecialchars($_POST["imagePath"]);
-    $allowSmoking = isset($_POST["allowSmoking"]) ? 1 : 0;
-    $hasGarage = isset($_POST["hasGarage"]) ? 1 : 0;
-    $petFriendly = isset($_POST["petFriendly"]) ? 1 : 0;
-    $hasInternet = isset($_POST["hasInternet"]) ? 1 : 0;
 
     // If manager is adding, use the hostId from form, otherwise use logged-in user
     $hostId = $_SESSION["role"] == "manager" ? htmlspecialchars($_POST["hostId"]) : $_SESSION["userId"];
 
-    $sql = "INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, bedrooms, bathrooms, maxGuests, description, imagePath, allowSmoking, hasGarage, petFriendly, hasInternet) 
-            VALUES ($hostId, '$name', '$address', '$city', $pricePerNight, $bedrooms, $bathrooms, $maxGuests, '$description', '$imagePath', $allowSmoking, $hasGarage, $petFriendly, $hasInternet);";
-    return $conn->query($sql);
+    // Insert accommodation without amenity columns
+    $sql = "INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, bedrooms, bathrooms, maxGuests, description, imagePath) 
+            VALUES ($hostId, '$name', '$address', '$city', $pricePerNight, $bedrooms, $bathrooms, $maxGuests, '$description', '$imagePath');";
+    
+    if ($conn->query($sql)) {
+        $accommodationId = $conn->insert_id;
+        
+        // Insert amenities if selected
+        if (isset($_POST["amenities"]) && is_array($_POST["amenities"])) {
+            foreach ($_POST["amenities"] as $amenityId) {
+                $amenityId = intval($amenityId);
+                $amenitySql = "INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES ($accommodationId, $amenityId);";
+                $conn->query($amenitySql);
+            }
+        }
+        return true;
+    }
+    return false;
 }
 ?>
 <!DOCTYPE html>
@@ -158,37 +188,21 @@ function insertAccommodation()
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Features</label>
+                        <label class="form-label">Amenities</label>
+                        <?php foreach ($allAmenities as $amenity): ?>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="allowSmoking" id="allowSmoking" value="1">
-                            <label class="form-check-label" for="allowSmoking">
-                                Allow Smoking
+                            <input class="form-check-input" type="checkbox" name="amenities[]" id="amenity<?php echo $amenity['amenityId']; ?>" value="<?php echo $amenity['amenityId']; ?>">
+                            <label class="form-check-label" for="amenity<?php echo $amenity['amenityId']; ?>">
+                                <i class="<?php echo htmlspecialchars($amenity['icon']); ?>"></i> <?php echo htmlspecialchars($amenity['name']); ?>
                             </label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hasGarage" id="hasGarage" value="1">
-                            <label class="form-check-label" for="hasGarage">
-                                Has Garage
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="petFriendly" id="petFriendly" value="1">
-                            <label class="form-check-label" for="petFriendly">
-                                Pet Friendly
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hasInternet" id="hasInternet" value="1">
-                            <label class="form-check-label" for="hasInternet">
-                                Has Internet
-                            </label>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='<?php echo ($_SESSION["role"] == "host" ? "host.php" : "manager.php"); ?>'">
+                        <a href="<?php echo htmlspecialchars($_SESSION["role"] == "host" ? "host.php" : "manager.php"); ?>" class="btn btn-secondary">
                             <i class="bi bi-x-circle me-2"></i>Cancel
-                        </button>
+                        </a>
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-plus-circle me-2"></i>Add Property
                         </button>

@@ -72,6 +72,20 @@ function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
     $result = $conn->query($sql);
     if ($result) {
         while ($row = $result->fetch_assoc()) {
+            // Fetch amenities for this accommodation
+            $accommodationId = $row['accommodationId'];
+            $amenitySql = "SELECT am.name, am.icon 
+                          FROM AMENITY am
+                          JOIN ACCOMMODATION_AMENITY aa ON am.amenityId = aa.amenityId
+                          WHERE aa.accommodationId = $accommodationId";
+            $amenityResult = $conn->query($amenitySql);
+            $row['amenities'] = [];
+            if ($amenityResult) {
+                while ($amenity = $amenityResult->fetch_assoc()) {
+                    $row['amenities'][] = $amenity;
+                }
+                $amenityResult->free();
+            }
             $results[] = $row;
         }
         $result->free();
@@ -164,17 +178,13 @@ function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
                                         </p>
                                     </div>
                                     <div class="mb-3">
-                                        <?php if ($accommodation['allowSmoking']): ?>
-                                            <span class="badge bg-info me-2"><i class="bi bi-tornado"></i> Smoking</span>
-                                        <?php endif; ?>
-                                        <?php if ($accommodation['hasGarage']): ?>
-                                            <span class="badge bg-secondary me-2"><i class="bi bi-car-front"></i> Garage</span>
-                                        <?php endif; ?>
-                                        <?php if ($accommodation['petFriendly']): ?>
-                                            <span class="badge bg-success me-2"><i class="bi bi-heart"></i> Pet Friendly</span>
-                                        <?php endif; ?>
-                                        <?php if ($accommodation['hasInternet']): ?>
-                                            <span class="badge bg-warning text-dark"><i class="bi bi-wifi"></i> Internet</span>
+                                        <?php if (!empty($accommodation['amenities'])): ?>
+                                            <?php foreach ($accommodation['amenities'] as $amenity): ?>
+                                                <span class="badge bg-secondary me-1 mb-1">
+                                                    <i class="<?php echo htmlspecialchars($amenity['icon']); ?>"></i> 
+                                                    <?php echo htmlspecialchars($amenity['name']); ?>
+                                                </span>
+                                            <?php endforeach; ?>
                                         <?php endif; ?>
                                     </div>
                                     <p class="card-text small text-muted flex-grow-1">

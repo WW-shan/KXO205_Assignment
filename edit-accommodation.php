@@ -14,12 +14,16 @@ if (!isset($_GET["id"])) {
 
 $accommodation_id = $_GET["id"];
 $row = null;
+$allAmenities = [];
+$selectedAmenities = [];
 
 if (empty($_POST)) {
     $row = select();
     if (!$row) {
         redirect("manager.php");
     }
+    $allAmenities = fetchAllAmenities();
+    $selectedAmenities = fetchAccommodationAmenities($accommodation_id);
 } else {
     // Verify CSRF token
     verifyCsrfToken();
@@ -45,6 +49,40 @@ function select()
     return $result ? $result->fetch_assoc() : null;
 }
 
+function fetchAllAmenities()
+{
+    global $conn;
+    $data = [];
+    $sql = "SELECT amenityId, name, icon FROM AMENITY ORDER BY amenityId;";
+    $result = $conn->query($sql);
+    if ($result && $result->num_rows > 0) {
+        while ($amenity = $result->fetch_assoc()) {
+            $data[] = $amenity;
+        }
+    }
+    if ($result) {
+        $result->free();
+    }
+    return $data;
+}
+
+function fetchAccommodationAmenities($accommodationId)
+{
+    global $conn;
+    $amenityIds = [];
+    $sql = "SELECT amenityId FROM ACCOMMODATION_AMENITY WHERE accommodationId = $accommodationId;";
+    $result = $conn->query($sql);
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $amenityIds[] = $row['amenityId'];
+        }
+    }
+    if ($result) {
+        $result->free();
+    }
+    return $amenityIds;
+}
+
 function update()
 {
     global $conn;
@@ -59,12 +97,26 @@ function update()
     $maxGuests = htmlspecialchars($_POST["maxGuests"]);
     $description = htmlspecialchars($_POST["description"]);
     $imagePath = htmlspecialchars($_POST["imagePath"]);
-    $allowSmoking = isset($_POST["allowSmoking"]) ? 1 : 0;
-    $hasGarage = isset($_POST["hasGarage"]) ? 1 : 0;
-    $petFriendly = isset($_POST["petFriendly"]) ? 1 : 0;
-    $hasInternet = isset($_POST["hasInternet"]) ? 1 : 0;
-    $sql = "UPDATE ACCOMMODATION SET name='$name', address='$address', city='$city', pricePerNight='$pricePerNight', bedrooms='$bedrooms', bathrooms='$bathrooms', maxGuests='$maxGuests', description='$description', imagePath='$imagePath', allowSmoking=$allowSmoking, hasGarage=$hasGarage, petFriendly=$petFriendly, hasInternet=$hasInternet WHERE accommodationId=$accommodation_id;";
-    return $conn->query($sql);
+    
+    // Update accommodation without amenity columns
+    $sql = "UPDATE ACCOMMODATION SET name='$name', address='$address', city='$city', pricePerNight='$pricePerNight', bedrooms='$bedrooms', bathrooms='$bathrooms', maxGuests='$maxGuests', description='$description', imagePath='$imagePath' WHERE accommodationId=$accommodation_id;";
+    
+    if ($conn->query($sql)) {
+        // Delete existing amenity relationships
+        $deleteSql = "DELETE FROM ACCOMMODATION_AMENITY WHERE accommodationId = $accommodation_id;";
+        $conn->query($deleteSql);
+        
+        // Insert new amenity relationships
+        if (isset($_POST["amenities"]) && is_array($_POST["amenities"])) {
+            foreach ($_POST["amenities"] as $amenityId) {
+                $amenityId = intval($amenityId);
+                $amenitySql = "INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES ($accommodation_id, $amenityId);";
+                $conn->query($amenitySql);
+            }
+        }
+        return true;
+    }
+    return false;
 }
 ?>
 <!DOCTYPE html>
@@ -147,31 +199,16 @@ function update()
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Features</label>
+                        <label class="form-label">Amenities</label>
+                        <?php foreach ($allAmenities as $amenity): ?>
+                        <?php $isChecked = in_array($amenity['amenityId'], $selectedAmenities) ? 'checked' : ''; ?>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="allowSmoking" id="allowSmoking" value="1" <?php if ($row["allowSmoking"]) echo "checked"; ?>>
-                            <label class="form-check-label" for="allowSmoking">
-                                Allow Smoking
+                            <input class="form-check-input" type="checkbox" name="amenities[]" id="amenity<?php echo $amenity['amenityId']; ?>" value="<?php echo $amenity['amenityId']; ?>" <?php echo $isChecked; ?>>
+                            <label class="form-check-label" for="amenity<?php echo $amenity['amenityId']; ?>">
+                                <i class="<?php echo htmlspecialchars($amenity['icon']); ?>"></i> <?php echo htmlspecialchars($amenity['name']); ?>
                             </label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hasGarage" id="hasGarage" value="1" <?php if ($row["hasGarage"]) echo "checked"; ?>>
-                            <label class="form-check-label" for="hasGarage">
-                                Has Garage
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="petFriendly" id="petFriendly" value="1" <?php if ($row["petFriendly"]) echo "checked"; ?>>
-                            <label class="form-check-label" for="petFriendly">
-                                Pet Friendly
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hasInternet" id="hasInternet" value="1" <?php if ($row["hasInternet"]) echo "checked"; ?>>
-                            <label class="form-check-label" for="hasInternet">
-                                Has Internet
-                            </label>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="d-flex gap-2">

@@ -38,13 +38,27 @@ CREATE TABLE ACCOMMODATION (
     bathrooms INT NOT NULL,
     description TEXT,
     imagePath VARCHAR(255) NOT NULL,
-    allowSmoking BOOLEAN DEFAULT 0,
-    hasGarage BOOLEAN DEFAULT 0,
-    petFriendly BOOLEAN DEFAULT 0,
-    hasInternet BOOLEAN DEFAULT 0,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (accommodationId),
     FOREIGN KEY (hostId) REFERENCES USER(userId) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Create AMENITY table
+CREATE TABLE AMENITY (
+    amenityId INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    icon VARCHAR(50), -- Bootstrap icon class
+    description VARCHAR(255),
+    PRIMARY KEY (amenityId)
+) ENGINE=InnoDB;
+
+-- Create ACCOMMODATION_AMENITY junction table
+CREATE TABLE ACCOMMODATION_AMENITY (
+    accommodationId INT NOT NULL,
+    amenityId INT NOT NULL,
+    PRIMARY KEY (accommodationId, amenityId),
+    FOREIGN KEY (accommodationId) REFERENCES ACCOMMODATION(accommodationId) ON DELETE CASCADE,
+    FOREIGN KEY (amenityId) REFERENCES AMENITY(amenityId) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create BOOKING table
@@ -77,22 +91,77 @@ INSERT INTO USER (email, password, firstName, lastName, phoneNumber, postalAddre
 ('client1@kxo205.com', '$2y$10$DummyHashForClient1', 'Alice', 'Traveler', '0433333333', '789 Travel Lane, Brisbane QLD 4000', 'client', NULL),
 ('client2@kxo205.com', '$2y$10$DummyHashForClient2', 'Bob', 'Guest', '0444444444', '101 Guest Road, Melbourne VIC 3001', 'client', NULL);
 
+-- Amenities (设施)
+INSERT INTO AMENITY (name, icon, description) VALUES
+('Smoking Allowed', 'bi-tornado', 'Smoking is permitted in this property'),
+('Garage', 'bi-car-front', 'Private garage or parking space'),
+('Pet Friendly', 'bi-heart', 'Pets are welcome'),
+('Internet', 'bi-wifi', 'High-speed internet/WiFi available'),
+('Air Conditioning', 'bi-snow', 'Climate control air conditioning'),
+('Swimming Pool', 'bi-water', 'Private or shared swimming pool'),
+('Kitchen', 'bi-egg-fried', 'Full kitchen with appliances'),
+('Washer/Dryer', 'bi-basket', 'In-unit laundry facilities');
+
 -- Accommodations
-INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, maxGuests, bedrooms, bathrooms, description, imagePath, allowSmoking, hasGarage, petFriendly, hasInternet) VALUES
-(2, 'Beachfront Villa', '123 Ocean Drive', 'Sydney', 350.00, 8, 4, 3, 'Stunning beachfront villa with direct ocean access.', 'img/house1.avif', 0, 1, 1, 1),
-(2, 'City Center Luxury Apartment', '456 CBD Street', 'Melbourne', 220.00, 4, 2, 2, 'Modern apartment in the heart of the city.', 'img/house2.avif', 0, 1, 0, 1),
-(3, 'Cozy Mountain Cabin', '789 Mountain View', 'Blue Mountains', 180.00, 6, 3, 2, 'Escape to nature in this cozy cabin.', 'img/house3.avif', 1, 0, 1, 0),
-(3, 'Modern Family Home', '101 Suburbia Lane', 'Brisbane', 280.00, 10, 5, 4, 'Spacious home perfect for large families.', 'img/house4.avif', 0, 1, 1, 1),
-(2, 'Country Retreat', '222 Vineyard Rd', 'Barossa Valley', 150.00, 4, 2, 1, 'Relaxing retreat in the wine country.', 'img/house5.avif', 1, 1, 0, 0),
-(3, 'Ocean View Penthouse', '777 Gold Coast Blvd', 'Gold Coast', 450.00, 6, 3, 3, 'Luxury penthouse with panoramic views.', 'img/house6.avif', 0, 1, 0, 1),
-(4, 'Harbor Loft', '12 Salamanca Place', 'Hobart', 195.00, 3, 1, 1, 'Waterfront loft steps from cafes and markets.', 'img/house1.avif', 0, 0, 0, 1),
-(4, 'Heritage Terrace', '5 Battery Point Ln', 'Hobart', 240.00, 4, 2, 2, 'Restored terrace with courtyard, close to harbor.', 'img/house2.avif', 0, 0, 1, 1),
-(5, 'Riverside Townhouse', '18 Swan River Dr', 'Perth', 260.00, 5, 3, 2, 'Townhouse overlooking the river, great for families.', 'img/house3.avif', 0, 1, 1, 1),
-(5, 'CBD Studio Pod', '99 Murray Street', 'Perth', 140.00, 2, 1, 1, 'Compact studio pod perfect for work trips.', 'img/house4.avif', 0, 0, 0, 1),
-(2, 'Surfside Shack', '45 Bondi Road', 'Sydney', 175.00, 3, 1, 1, 'Casual surf shack minutes from the sand.', 'img/house5.avif', 1, 0, 1, 1),
-(3, 'Rainforest Retreat', '321 Hinterland Way', 'Sunshine Coast', 210.00, 4, 2, 2, 'Private retreat surrounded by rainforest trails.', 'img/house6.avif', 0, 0, 0, 0),
-(4, 'Wine Country Cottage', '14 Vineyard Loop', 'Barossa Valley', 185.00, 4, 2, 1, 'Cottage nestled among vines with fire pit.', 'img/house1.avif', 0, 1, 1, 0),
-(5, 'Skyline Apartment', '200 St Georges Tce', 'Perth', 310.00, 4, 2, 2, 'High-floor apartment with skyline views.', 'img/house2.avif', 0, 1, 0, 1);
+INSERT INTO ACCOMMODATION (hostId, name, address, city, pricePerNight, maxGuests, bedrooms, bathrooms, description, imagePath) VALUES
+(2, 'Beachfront Villa', '123 Ocean Drive', 'Sydney', 350.00, 8, 4, 3, 'Stunning beachfront villa with direct ocean access.', 'img/house1.avif'),
+(2, 'City Center Luxury Apartment', '456 CBD Street', 'Melbourne', 220.00, 4, 2, 2, 'Modern apartment in the heart of the city.', 'img/house2.avif'),
+(3, 'Cozy Mountain Cabin', '789 Mountain View', 'Blue Mountains', 180.00, 6, 3, 2, 'Escape to nature in this cozy cabin.', 'img/house3.avif'),
+(3, 'Modern Family Home', '101 Suburbia Lane', 'Brisbane', 280.00, 10, 5, 4, 'Spacious home perfect for large families.', 'img/house4.avif'),
+(2, 'Country Retreat', '222 Vineyard Rd', 'Barossa Valley', 150.00, 4, 2, 1, 'Relaxing retreat in the wine country.', 'img/house5.avif'),
+(3, 'Ocean View Penthouse', '777 Gold Coast Blvd', 'Gold Coast', 450.00, 6, 3, 3, 'Luxury penthouse with panoramic views.', 'img/house6.avif'),
+(4, 'Harbor Loft', '12 Salamanca Place', 'Hobart', 195.00, 3, 1, 1, 'Waterfront loft steps from cafes and markets.', 'img/house1.avif'),
+(4, 'Heritage Terrace', '5 Battery Point Ln', 'Hobart', 240.00, 4, 2, 2, 'Restored terrace with courtyard, close to harbor.', 'img/house2.avif'),
+(5, 'Riverside Townhouse', '18 Swan River Dr', 'Perth', 260.00, 5, 3, 2, 'Townhouse overlooking the river, great for families.', 'img/house3.avif'),
+(5, 'CBD Studio Pod', '99 Murray Street', 'Perth', 140.00, 2, 1, 1, 'Compact studio pod perfect for work trips.', 'img/house4.avif'),
+(2, 'Surfside Shack', '45 Bondi Road', 'Sydney', 175.00, 3, 1, 1, 'Casual surf shack minutes from the sand.', 'img/house5.avif'),
+(3, 'Rainforest Retreat', '321 Hinterland Way', 'Sunshine Coast', 210.00, 4, 2, 2, 'Private retreat surrounded by rainforest trails.', 'img/house6.avif'),
+(4, 'Wine Country Cottage', '14 Vineyard Loop', 'Barossa Valley', 185.00, 4, 2, 1, 'Cottage nestled among vines with fire pit.', 'img/house1.avif'),
+(5, 'Skyline Apartment', '200 St Georges Tce', 'Perth', 310.00, 4, 2, 2, 'High-floor apartment with skyline views.', 'img/house2.avif');
+
+-- Accommodation-Amenity Relationships
+-- 1: Beachfront Villa (Garage, Pet Friendly, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(1, 2), (1, 3), (1, 4), (1, 6), (1, 7);
+-- 2: City Center Luxury Apartment (Garage, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(2, 2), (2, 4), (2, 5), (2, 7);
+-- 3: Cozy Mountain Cabin (Smoking Allowed, Pet Friendly)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(3, 1), (3, 3), (3, 7);
+-- 4: Modern Family Home (Garage, Pet Friendly, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(4, 2), (4, 3), (4, 4), (4, 6), (4, 7), (4, 8);
+-- 5: Country Retreat (Smoking Allowed, Garage)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(5, 1), (5, 2), (5, 7);
+-- 6: Ocean View Penthouse (Garage, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(6, 2), (6, 4), (6, 5), (6, 6);
+-- 7: Harbor Loft (Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(7, 4), (7, 7);
+-- 8: Heritage Terrace (Pet Friendly, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(8, 3), (8, 4), (8, 7);
+-- 9: Riverside Townhouse (Garage, Pet Friendly, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(9, 2), (9, 3), (9, 4), (9, 7), (9, 8);
+-- 10: CBD Studio Pod (Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(10, 4), (10, 5);
+-- 11: Surfside Shack (Smoking Allowed, Pet Friendly, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(11, 1), (11, 3), (11, 4);
+-- 12: Rainforest Retreat (nothing - removed old features)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(12, 7);
+-- 13: Wine Country Cottage (Garage, Pet Friendly)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(13, 2), (13, 3), (13, 7);
+-- 14: Skyline Apartment (Garage, Internet)
+INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
+(14, 2), (14, 4), (14, 5);
 
 -- Bookings
 INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, phoneNumber, totalPrice, paymentDetails, status) VALUES

@@ -206,7 +206,7 @@ $dbname = "KXO205";</code></pre>
                     <li class="mb-3">
                       <strong>Access the application:</strong>
                       <ul class="mt-2">
-                        <li>🌐 Web Application: <a href="http://localhost:80" target="_blank" class="fw-bold">http://localhost:8000</a></li>
+                        <li>🌐 Web Application: <a href="http://localhost:80" target="_blank" class="fw-bold">http://localhost:80</a></li>
                         <li>🗄️ phpMyAdmin: <a href="http://localhost:8080" target="_blank" class="fw-bold">http://localhost:8080</a> 
                             <span class="badge bg-secondary">Username: root</span>
                             <span class="badge bg-secondary">Password: (empty)</span>

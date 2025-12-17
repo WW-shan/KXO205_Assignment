@@ -65,16 +65,21 @@
                   <h5 class="mt-4 mb-3"><i class="bi bi-list-ol me-2"></i>Deployment Steps</h5>
                   <ol class="deployment-steps">
                     <li class="mb-3">
-                      <strong>Locate WampServer www directory</strong>
+                      <strong>Clone the project from GitHub</strong>
                       <ul class="mt-2">
-                        <li>Default path: <code>C:\wamp64\www\</code></li>
-                        <li>Or right-click Wamp icon → <strong>www directory</strong></li>
+                        <li>Open Command Prompt or PowerShell</li>
+                        <li>Navigate to WampServer www directory: <code>cd C:\wamp64\www\</code></li>
+                        <li>Clone the repository:
+                          <pre class="bg-dark text-white p-3 rounded mt-2"><code>git clone https://github.com/WW-shan/KXO205_Assignment.git</code></pre>
+                        </li>
+                        <li>Or download ZIP from GitHub and extract to <code>C:\wamp64\www\KXO205_Assignment\</code></li>
                       </ul>
                     </li>
                     <li class="mb-3">
-                      <strong>Copy project folder</strong> to the www directory
+                      <strong>Verify project location</strong>
                       <ul class="mt-2">
-                        <li>Example: <code>C:\wamp64\www\KXO205_Assignment\</code></li>
+                        <li>Ensure files are in: <code>C:\wamp64\www\KXO205_Assignment\</code></li>
+                        <li>You should see <code>index.php</code>, <code>database.sql</code>, etc.</li>
                       </ul>
                     </li>
                     <li class="mb-3">
@@ -182,7 +187,15 @@ $dbname = "KXO205";</code></pre>
                   <h5 class="mt-4 mb-3"><i class="bi bi-list-ol me-2"></i>Deployment Steps</h5>
                   <ol class="deployment-steps">
                     <li class="mb-3">
-                      <strong>Clone or download the project</strong> to your local machine
+                      <strong>Clone the project from GitHub</strong>
+                      <ul class="mt-2">
+                        <li>Open a terminal or command prompt</li>
+                        <li>Clone the repository:
+                          <pre class="bg-dark text-white p-3 rounded mt-2"><code>git clone https://github.com/WW-shan/KXO205_Assignment.git
+cd KXO205_Assignment</code></pre>
+                        </li>
+                        <li>Or download ZIP from GitHub and extract it</li>
+                      </ul>
                     </li>
                     <li class="mb-3">
                       <strong>Open a terminal</strong> in the project root directory (where docker-compose.yml is located)
@@ -540,6 +553,19 @@ $dbname = "KXO205";</code></pre>
                 </div>
               </div>
               <p class="mt-4">Throughout the development process, our team maintained strong communication and collaboration. We held regular meetings to discuss progress, address challenges, and ensure all components integrated seamlessly. Each member took ownership of their assigned areas while remaining flexible to assist teammates when needed, fostering a collaborative and supportive development environment.</p>
+              
+              <div class="alert alert-info mt-4 mb-0">
+                <h6 class="alert-heading mb-2">
+                  <i class="bi bi-github me-2"></i>Source Code Repository
+                </h6>
+                <p class="mb-0">
+                  View the complete project source code on GitHub: 
+                  <a href="https://github.com/WW-shan/KXO205_Assignment" target="_blank" class="text-primary text-decoration-underline fw-bold">
+                    https://github.com/WW-shan/KXO205_Assignment
+                    <i class="bi bi-box-arrow-up-right ms-1"></i>
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
 

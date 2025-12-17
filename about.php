@@ -33,80 +33,216 @@
               <h4 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Deployment Instructions</h4>
             </div>
             <div class="card-body">
-              <p class="mb-4">This project uses Docker for containerization, making deployment simple and consistent across different environments. Follow these steps to deploy the application:</p>
+              <p class="mb-4">This project supports two deployment methods: WampServer for traditional local development, or Docker for containerized deployment. Choose the method that best suits your environment.</p>
               
-              <div class="alert alert-info" role="alert">
-                <i class="bi bi-info-circle me-2"></i>
-                <strong>Prerequisites</strong>
-                <ul class="mb-0 mt-2">
-                  <li>Docker Desktop installed and running</li>
-                  <li>Docker Compose (included with Docker Desktop)</li>
-                  <li>At least 2GB of free disk space</li>
-                </ul>
-              </div>
-              
-              <h5 class="mt-4 mb-3"><i class="bi bi-list-ol me-2"></i>Deployment Steps</h5>
-              <ol class="deployment-steps">
-                <li class="mb-3">
-                  <strong>Clone or download the project</strong> to your local machine
+              <!-- Deployment Method Tabs -->
+              <ul class="nav nav-tabs mb-4" id="deploymentTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active fw-bold" id="wamp-tab" data-bs-toggle="tab" data-bs-target="#wamp" type="button" role="tab" aria-controls="wamp" aria-selected="true">
+                    <i class="bi bi-server me-2"></i><span class="fs-6">WampServer Deployment</span>
+                  </button>
                 </li>
-                <li class="mb-3">
-                  <strong>Open a terminal</strong> in the project root directory (where docker-compose.yml is located)
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link fw-bold" id="docker-tab" data-bs-toggle="tab" data-bs-target="#docker" type="button" role="tab" aria-controls="docker" aria-selected="false">
+                    <i class="bi bi-box me-2"></i><span class="fs-6">Docker Deployment</span>
+                  </button>
                 </li>
-                <li class="mb-3">
-                  <strong>Build and start containers:</strong>
-                  <pre class="bg-dark text-white p-3 rounded mt-2"><code>docker-compose up -d --build</code></pre>
-                  <div class="alert alert-secondary mt-2">
-                    This will:
+              </ul>
+
+              <div class="tab-content" id="deploymentTabContent">
+                <!-- WampServer Deployment -->
+                <div class="tab-pane fade show active" id="wamp" role="tabpanel" aria-labelledby="wamp-tab">
+                  <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Prerequisites</strong>
                     <ul class="mb-0 mt-2">
-                      <li>Build the PHP-Apache web server image</li>
-                      <li>Create MySQL 8.0 database container with database name <code class="bg-white text-dark px-2 py-1 rounded">KXO205</code></li>
-                      <li>Initialize database schema from database.sql</li>
-                      <li>Start phpMyAdmin for database management</li>
+                      <li>WampServer 3.2+ installed (includes Apache, PHP 8.0+, MySQL)</li>
+                      <li>Wamp services running (green icon in system tray)</li>
+                      <li>At least 500MB of free disk space</li>
                     </ul>
                   </div>
-                </li>
-                <li class="mb-3">
-                  <strong>Wait for initialization</strong> (approximately 30-60 seconds for first-time setup)
-                </li>
-                <li class="mb-3">
-                  <strong>Access the application:</strong>
-                  <ul class="mt-2">
-                    <li>🌐 Web Application: <a href="http://localhost:8000" target="_blank" class="fw-bold">http://localhost:8000</a></li>
-                    <li>🗄️ phpMyAdmin: <a href="http://localhost:8080" target="_blank" class="fw-bold">http://localhost:8080</a> 
-                        <span class="badge bg-secondary">Username: root</span>
-                        <span class="badge bg-secondary">Password: rootpassword</span>
+
+                  <h5 class="mt-4 mb-3"><i class="bi bi-list-ol me-2"></i>Deployment Steps</h5>
+                  <ol class="deployment-steps">
+                    <li class="mb-3">
+                      <strong>Locate WampServer www directory</strong>
+                      <ul class="mt-2">
+                        <li>Default path: <code>C:\wamp64\www\</code></li>
+                        <li>Or right-click Wamp icon → <strong>www directory</strong></li>
+                      </ul>
                     </li>
-                  </ul>
-                </li>
-              </ol>
-              
-              <div class="card bg-light mt-4">
-                <div class="card-body">
-                  <h6 class="card-title"><i class="bi bi-terminal me-2"></i>Useful Commands</h6>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <div class="p-2 bg-white rounded">
-                        <strong>Stop containers:</strong><br>
-                        <code class="text-danger">docker-compose down</code>
+                    <li class="mb-3">
+                      <strong>Copy project folder</strong> to the www directory
+                      <ul class="mt-2">
+                        <li>Example: <code>C:\wamp64\www\KXO205_Assignment\</code></li>
+                      </ul>
+                    </li>
+                    <li class="mb-3">
+                      <strong>Create database:</strong>
+                      <ul class="mt-2">
+                        <li>Click Wamp icon → <strong>phpMyAdmin</strong></li>
+                        <li>Or visit <a href="http://localhost/phpmyadmin" target="_blank">http://localhost/phpmyadmin</a></li>
+                        <li>Click <strong>"New"</strong> in the left sidebar</li>
+                        <li>Database name: <code class="bg-light px-2 py-1 rounded">KXO205</code></li>
+                        <li>Collation: <code>utf8mb4_general_ci</code></li>
+                        <li>Click <strong>"Create"</strong></li>
+                      </ul>
+                    </li>
+                    <li class="mb-3">
+                      <strong>Import database schema:</strong>
+                      <ul class="mt-2">
+                        <li>Select the <strong>KXO205</strong> database</li>
+                        <li>Click <strong>"Import"</strong> tab</li>
+                        <li>Click <strong>"Choose File"</strong></li>
+                        <li>Select <code>database.sql</code> from project folder</li>
+                        <li>Click <strong>"Go"</strong> at the bottom</li>
+                        <li>Wait for success message</li>
+                      </ul>
+                    </li>
+                    <li class="mb-3">
+                      <strong>Configure database connection:</strong>
+                      <ul class="mt-2">
+                        <li>Open <code>includes/dbconn.php</code> in a text editor</li>
+                        <li>The file is already configured for WampServer defaults:
+                          <pre class="bg-dark text-white p-3 rounded mt-2"><code>$host = "localhost";
+$user = "root";
+$pass = "";  // WampServer default (no password)
+$dbname = "KXO205";</code></pre>
+                        </li>
+                        <li>If your MySQL password is different, update the <code>$pass</code> variable</li>
+                      </ul>
+                    </li>
+                    <li class="mb-3">
+                      <strong>Access the application:</strong>
+                      <ul class="mt-2">
+                        <li>🌐 Web Application: <a href="http://localhost/KXO205_Assignment/" target="_blank" class="fw-bold">http://localhost/KXO205_Assignment/</a></li>
+                        <li>🗄️ phpMyAdmin: <a href="http://localhost/phpmyadmin" target="_blank" class="fw-bold">http://localhost/phpmyadmin</a>
+                            <span class="badge bg-secondary">Username: root</span>
+                            <span class="badge bg-secondary">Password: (empty)</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ol>
+
+                  <div class="alert alert-warning mt-4" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Troubleshooting</h6>
+                    <ul class="mb-0">
+                      <li><strong>Port 80 already in use:</strong> Close Skype or change Apache port in Wamp settings</li>
+                      <li><strong>Database connection error:</strong> Verify MySQL service is running (Wamp icon should be green)</li>
+                      <li><strong>404 Not Found:</strong> Ensure project is in <code>www</code> folder and path matches URL</li>
+                      <li><strong>Session errors:</strong> Check that PHP session directory has write permissions</li>
+                    </ul>
+                  </div>
+
+                  <div class="card bg-light mt-4">
+                    <div class="card-body">
+                      <h6 class="card-title"><i class="bi bi-tools me-2"></i>WampServer Quick Actions</h6>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <div class="p-3 bg-white rounded border">
+                            <strong class="text-primary">Start/Stop Services:</strong><br>
+                            <span class="text-dark">Right-click Wamp icon → Start/Stop All Services</span>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="p-3 bg-white rounded border">
+                            <strong class="text-primary">Check PHP Version:</strong><br>
+                            <span class="text-dark">Left-click Wamp icon → PHP → Version</span>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="p-3 bg-white rounded border">
+                            <strong class="text-primary">View Error Logs:</strong><br>
+                            <span class="text-dark">Wamp icon → Apache → Apache error log</span>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="p-3 bg-white rounded border">
+                            <strong class="text-primary">Restart Apache:</strong><br>
+                            <span class="text-dark">Wamp icon → Apache → Service administration → Restart</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="p-2 bg-white rounded">
-                        <strong>View logs:</strong><br>
-                        <code class="text-primary">docker-compose logs -f web</code>
+                  </div>
+                </div>
+
+                <!-- Docker Deployment -->
+                <div class="tab-pane fade" id="docker" role="tabpanel" aria-labelledby="docker-tab">
+                  <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Prerequisites</strong>
+                    <ul class="mb-0 mt-2">
+                      <li>Docker Desktop installed and running</li>
+                      <li>Docker Compose (included with Docker Desktop)</li>
+                      <li>At least 2GB of free disk space</li>
+                    </ul>
+                  </div>
+                  
+                  <h5 class="mt-4 mb-3"><i class="bi bi-list-ol me-2"></i>Deployment Steps</h5>
+                  <ol class="deployment-steps">
+                    <li class="mb-3">
+                      <strong>Clone or download the project</strong> to your local machine
+                    </li>
+                    <li class="mb-3">
+                      <strong>Open a terminal</strong> in the project root directory (where docker-compose.yml is located)
+                    </li>
+                    <li class="mb-3">
+                      <strong>Build and start containers:</strong>
+                      <pre class="bg-dark text-white p-3 rounded mt-2"><code>docker-compose up -d --build</code></pre>
+                      <div class="alert alert-secondary mt-2">
+                        This will:
+                        <ul class="mb-0 mt-2">
+                          <li>Build the PHP-Apache web server image</li>
+                          <li>Create MySQL 8.0 database container with database name <code class="bg-white text-dark px-2 py-1 rounded">KXO205</code></li>
+                          <li>Initialize database schema from database.sql</li>
+                          <li>Start phpMyAdmin for database management</li>
+                        </ul>
                       </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="p-2 bg-white rounded">
-                        <strong>Restart containers:</strong><br>
-                        <code class="text-warning">docker-compose restart</code>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="p-2 bg-white rounded">
-                        <strong>Rebuild after changes:</strong><br>
-                        <code class="text-success">docker-compose up -d --build</code>
+                    </li>
+                    <li class="mb-3">
+                      <strong>Wait for initialization</strong> (approximately 30-60 seconds for first-time setup)
+                    </li>
+                    <li class="mb-3">
+                      <strong>Access the application:</strong>
+                      <ul class="mt-2">
+                        <li>🌐 Web Application: <a href="http://localhost:8000" target="_blank" class="fw-bold">http://localhost:8000</a></li>
+                        <li>🗄️ phpMyAdmin: <a href="http://localhost:8080" target="_blank" class="fw-bold">http://localhost:8080</a> 
+                            <span class="badge bg-secondary">Username: root</span>
+                            <span class="badge bg-secondary">Password: rootpassword</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ol>
+                  
+                  <div class="card bg-light mt-4">
+                    <div class="card-body">
+                      <h6 class="card-title"><i class="bi bi-terminal me-2"></i>Useful Docker Commands</h6>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <div class="p-2 bg-white rounded">
+                            <strong>Stop containers:</strong><br>
+                            <code class="text-danger">docker-compose down</code>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="p-2 bg-white rounded">
+                            <strong>View logs:</strong><br>
+                            <code class="text-primary">docker-compose logs -f web</code>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="p-2 bg-white rounded">
+                            <strong>Restart containers:</strong><br>
+                            <code class="text-warning">docker-compose restart</code>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="p-2 bg-white rounded">
+                            <strong>Rebuild after changes:</strong><br>
+                            <code class="text-success">docker-compose up -d --build</code>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

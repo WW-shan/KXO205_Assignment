@@ -10,6 +10,7 @@ require "includes/dbconn.php";
     <meta name="author" content="Shengyi Shi 744564, Yuming Deng 744571, Mingxuan Xu 744580, Yanzhang Lu 744586" />
     <meta name="description" content="Find and book unique accommodations worldwide with KXO205 Booking System" />
     <title>KXO205 Accommodation Booking - Find Your Perfect Stay</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/bootstrap-icons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />

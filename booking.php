@@ -231,17 +231,17 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
 
                         <div class="mb-3">
                             <h6>Booking Details</h6>
-                            <p class="mb-1"><strong>Check-in:</strong> <?php echo $check_in; ?></p>
-                            <p class="mb-1"><strong>Check-out:</strong> <?php echo $check_out; ?></p>
-                            <p class="mb-1"><strong>Guests:</strong> <?php echo $guests; ?></p>
-                            <p class="mb-0"><strong>Nights:</strong> <?php echo $nights; ?></p>
+                            <p class="mb-1"><strong>Check-in:</strong> <span id="summary-checkin"><?php echo $check_in; ?></span></p>
+                            <p class="mb-1"><strong>Check-out:</strong> <span id="summary-checkout"><?php echo $check_out; ?></span></p>
+                            <p class="mb-1"><strong>Guests:</strong> <span id="summary-guests"><?php echo $guests; ?></span></p>
+                            <p class="mb-0"><strong>Nights:</strong> <span id="summary-nights"><?php echo $nights; ?></span></p>
                         </div>
 
                         <hr>
 
                         <div class="mb-0">
                             <h5>Price Breakdown</h5>
-                            <p class="mb-1">$<?php echo number_format($accommodation["pricePerNight"], 2); ?> x <?php echo $nights; ?> nights = <strong>$<?php echo number_format($total_price, 2); ?></strong></p>
+                            <p class="mb-1">$<?php echo number_format($accommodation["pricePerNight"], 2); ?> x <span id="breakdown-nights"><?php echo $nights; ?></span> nights = <strong>$<span id="breakdown-total"><?php echo number_format($total_price, 2); ?></span></strong></p>
                         </div>
                     </div>
                 </div>
@@ -335,7 +335,7 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
 
                             <div class="mb-3 p-3 bg-light rounded">
                                 <h6>Total Cost</h6>
-                                <h4 class="text-primary mb-0">$<?php echo number_format($total_price, 2); ?></h4>
+                                <h4 class="text-primary mb-0">$<span id="total-cost" data-price-per-night="<?php echo $accommodation['pricePerNight']; ?>"><?php echo number_format($total_price, 2); ?></span></h4>
                             </div>
 
                             <div class="d-flex gap-2">
@@ -354,6 +354,7 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
     </main>
 
     <!-- Scripts -->
+    <script src="js/booking.js"></script>
     <script src="js/dark-mode.js"></script>
     <script src="js/scroll-to-top.js"></script>
 </body>

@@ -173,26 +173,6 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
       </div>
     </main>
 
-    <!-- Footer -->
-    <div class="container">
-      <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-          <li class="nav-item">
-            <a href="index.html" class="nav-link px-2 text-muted">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="search.html" class="nav-link px-2 text-muted"
-              >Accommodation</a
-            >
-          </li>
-          <li class="nav-item">
-            <a href="about.html" class="nav-link px-2 text-muted">About Us</a>
-          </li>
-        </ul>
-        <p class="text-center text-muted">&copy; 2025 KXO205 Accommodation</p>
-      </footer>
-    </div>
-
     <!-- Scripts -->
     <script src="js/validation.js?v=<?php echo time(); ?>"></script>
     <script src="js/dark-mode.js"></script>

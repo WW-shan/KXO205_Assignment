@@ -106,6 +106,8 @@ $csrfToken = generateCsrfToken();
             if ($result = $conn->query($sql)) {
               if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                  $is_cancelled = ($row["status"] === 'cancelled');
+                  
                   // Decrypt payment details
                   $payment_info = decryptPaymentDetails($row["paymentDetails"]);
                   $payment_display = "-";
@@ -127,7 +129,13 @@ $csrfToken = generateCsrfToken();
                   echo "<td>" . htmlspecialchars($row["phoneNumber"] ?? "-") . "</td>";
                   echo "<td><small>" . htmlspecialchars($payment_display) . "</small></td>";
                   echo "<td>$" . htmlspecialchars($row["totalPrice"]) . "</td>";
-                  echo "<td>" . htmlspecialchars($row["status"]) . "</td>";
+                  
+                  // Display status with badge
+                  $statusBadge = $row["status"] === 'cancelled' ? 
+                    "<span class='badge bg-secondary'>Cancelled</span>" : 
+                    "<span class='badge bg-success'>Confirmed</span>";
+                  echo "<td>" . $statusBadge . "</td>";
+                  
                   echo "</tr>";
                 }
               } else {

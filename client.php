@@ -60,7 +60,8 @@ $csrfToken = generateCsrfToken();
                 while ($row = $result->fetch_assoc()) {
                   $check_out = strtotime($row["checkOutDate"]);
                   $today = strtotime(date('Y-m-d'));
-                  $can_cancel = ($check_out > $today) ? true : false;
+                  $is_cancelled = ($row["status"] === 'cancelled');
+                  $can_cancel = ($check_out > $today && !$is_cancelled) ? true : false;
                   
                   // Decrypt payment details
                   $payment_info = decryptPaymentDetails($row["paymentDetails"]);
@@ -83,9 +84,17 @@ $csrfToken = generateCsrfToken();
                   echo "<td>" . htmlspecialchars($row["phoneNumber"] ?? "-") . "</td>";
                   echo "<td>$" . htmlspecialchars($row["totalPrice"]) . "</td>";
                   echo "<td><small>" . htmlspecialchars($payment_display) . "</small></td>";
-                  echo "<td>" . htmlspecialchars($row["status"]) . "</td>";
+                  
+                  // Display status with badge
+                  $statusBadge = $row["status"] === 'cancelled' ? 
+                    "<span class='badge bg-secondary'>Cancelled</span>" : 
+                    "<span class='badge bg-success'>Confirmed</span>";
+                  echo "<td>" . $statusBadge . "</td>";
+                  
                   if ($can_cancel) {
-                    echo "<td><a href='cancel-booking.php?id=" . htmlspecialchars($row["bookingId"]) . "&token=" . urlencode($csrfToken) . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure?')\"><i class='bi bi-x-circle'></i> Cancel</a></td>";
+                    echo "<td><a href='cancel-booking.php?id=" . htmlspecialchars($row["bookingId"]) . "&token=" . urlencode($csrfToken) . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure you want to cancel this booking?')\"><i class='bi bi-x-circle'></i> Cancel</a></td>";
+                  } elseif ($is_cancelled) {
+                    echo "<td><span class='text-muted'>Cancelled</span></td>";
                   } else {
                     echo "<td><span class='text-muted'>Expired</span></td>";
                   }

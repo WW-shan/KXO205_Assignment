@@ -1,5 +1,4 @@
 <?php
-
 define("DB_HOST", "db"); // Docker
 define("DB_NAME", "KXO205"); // Set this to your username
 define("DB_USER", "root"); // Set this to your username

@@ -1,7 +1,7 @@
 <?php
 
 define("DB_HOST", "localhost"); // Leave this line as is
-define("DB_NAME", "kxo205"); // Set this to your username
+define("DB_NAME", "KXO205"); // Set this to your username
 define("DB_USER", "root"); // Set this to your username
 define("DB_PASS", ""); // Set this to your DB password
 

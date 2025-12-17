@@ -256,20 +256,6 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Guest Information</h5>
-
-                        <?php if ($_SESSION["role"] !== "client"): ?>
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <h6 class="alert-heading">
-                                <i class="bi bi-info-circle me-2"></i>Notice for <?php echo ucfirst($_SESSION["role"]); ?> Account
-                            </h6>
-                            <p class="mb-0">
-                                You are currently logged in as a <strong><?php echo $_SESSION["role"]; ?></strong>. 
-                                To view and manage your bookings, please use a <strong>client</strong> account.
-                                Bookings made with this account will not appear in your dashboard.
-                            </p>
-                        </div>
-                        <?php endif; ?>
-
                         <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?php foreach ($errors as $error): ?>

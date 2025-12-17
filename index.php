@@ -113,9 +113,21 @@ require "includes/dbconn.php";
                           <p class="small text-muted mb-2">
                             Hosted by: ' . $host_name . '
                           </p>
-                          <a href="booking.php?accommodation_id=' . $acc_id . '" class="btn btn-primary mt-auto">
-                            <i class="bi bi-calendar-check"></i> Book Now
-                          </a>
+                          ';
+                          if (isset($_SESSION['role']) && $_SESSION['role'] === 'client') {
+                              echo '<a href="booking.php?accommodation_id=' . $acc_id . '" class="btn btn-primary mt-auto">
+                                      <i class="bi bi-calendar-check"></i> Book Now
+                                    </a>';
+                          } elseif (isset($_SESSION['role']) && ($_SESSION['role'] === 'host' || $_SESSION['role'] === 'manager')) {
+                              echo '<button class="btn btn-secondary mt-auto" disabled>
+                                      <i class="bi bi-lock"></i> Only Clients Can Book
+                                    </button>';
+                          } else {
+                              echo '<a href="login.php" class="btn btn-outline-primary mt-auto">
+                                      <i class="bi bi-box-arrow-in-right"></i> Login to Book
+                                    </a>';
+                          }
+                          echo '
                         </div>
                       </div>
                     </div>

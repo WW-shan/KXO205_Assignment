@@ -199,6 +199,10 @@ function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
                                         <a href="booking.php?accommodation_id=<?php echo $accommodation['accommodationId']; ?>&check_in=<?php echo urlencode($check_in); ?>&check_out=<?php echo urlencode($check_out); ?>&guests=<?php echo $guests; ?>" class="btn btn-primary w-100 mt-auto">
                                             <i class="bi bi-calendar-check"></i> Book Now ($<?php echo number_format($total_price, 2); ?>)
                                         </a>
+                                    <?php elseif (isset($_SESSION['role']) && ($_SESSION['role'] === 'host' || $_SESSION['role'] === 'manager')): ?>
+                                        <button class="btn btn-secondary w-100 mt-auto" disabled>
+                                            <i class="bi bi-lock"></i> Only Clients Can Book
+                                        </button>
                                     <?php else: ?>
                                         <a href="login.php" class="btn btn-outline-primary w-100 mt-auto">
                                             <i class="bi bi-box-arrow-in-right"></i> Login to Book

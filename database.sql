@@ -83,13 +83,13 @@ CREATE TABLE BOOKING (
 
 -- Users
 INSERT INTO USER (email, password, firstName, lastName, phoneNumber, postalAddress, role, abnNumber) VALUES
-('manager@kxo205.com', '$2y$10$DummyHashForManager', 'System', 'Manager', '0400000000', '1 Manager Street, Sydney NSW 2000', 'manager', NULL),
-('host1@kxo205.com', '$2y$10$DummyHashForHost1', 'John', 'Host', '0411111111', '123 Ocean Drive, Sydney NSW 2026', 'host', '12345678901'),
-('host2@kxo205.com', '$2y$10$DummyHashForHost2', 'Jane', 'Owner', '0422222222', '456 CBD Street, Melbourne VIC 3000', 'host', '98765432109'),
-('host3@kxo205.com', '$2y$10$DummyHashForHost3', 'Ethan', 'Hills', '0455555555', '88 Peak Road, Hobart TAS 7000', 'host', '56789012345'),
-('host4@kxo205.com', '$2y$10$DummyHashForHost4', 'Grace', 'Bay', '0466666666', '55 Marina Parade, Perth WA 6000', 'host', '21098765432'),
-('client1@kxo205.com', '$2y$10$DummyHashForClient1', 'Alice', 'Traveler', '0433333333', '789 Travel Lane, Brisbane QLD 4000', 'client', NULL),
-('client2@kxo205.com', '$2y$10$DummyHashForClient2', 'Bob', 'Guest', '0444444444', '101 Guest Road, Melbourne VIC 3001', 'client', NULL);
+('manager@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'System', 'Manager', '0400000000', '1 Manager Street, Sydney NSW 2000', 'manager', NULL),
+('host1@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'John', 'Host', '0411111111', '123 Ocean Drive, Sydney NSW 2026', 'host', '12345678901'),
+('host2@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'Jane', 'Owner', '0422222222', '456 CBD Street, Melbourne VIC 3000', 'host', '98765432109'),
+('host3@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'Ethan', 'Hills', '0455555555', '88 Peak Road, Hobart TAS 7000', 'host', '56789012345'),
+('host4@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'Grace', 'Bay', '0466666666', '55 Marina Parade, Perth WA 6000', 'host', '21098765432'),
+('client1@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'Alice', 'Traveler', '0433333333', '789 Travel Lane, Brisbane QLD 4000', 'client', NULL),
+('client2@kxo205.com', '$2b$10$xniOLT3xwzGy.NDeU54wzeuqQxUHo9prBBYtoCigtVl.WpbnUmn1W', 'Bob', 'Guest', '0444444444', '101 Guest Road, Melbourne VIC 3001', 'client', NULL);
 
 -- Amenities (设施)
 INSERT INTO AMENITY (name, icon, description) VALUES
@@ -165,12 +165,12 @@ INSERT INTO ACCOMMODATION_AMENITY (accommodationId, amenityId) VALUES
 
 -- Bookings
 INSERT INTO BOOKING (userId, accommodationId, checkInDate, checkOutDate, guests, phoneNumber, totalPrice, paymentDetails, status) VALUES
-(4, 1, '2025-11-15', '2025-11-18', 4, '+61400111222', 1050.00, 'EncryptedDataHere', 'confirmed'),
-(4, 2, '2025-12-24', '2025-12-28', 2, '+61400111222', 880.00, 'EncryptedDataHere', 'confirmed'),
-(5, 5, '2025-09-01', '2025-09-05', 2, '+61400333444', 600.00, 'EncryptedDataHere', 'confirmed'),
-(4, 4, '2025-12-05', '2025-12-08', 5, '+61400111222', 840.00, 'EncryptedDataHere', 'confirmed'),
-(5, 6, '2025-12-10', '2025-12-13', 2, '+61400333444', 900.00, 'EncryptedDataHere', 'confirmed'),
-(4, 3, '2025-12-15', '2025-12-18', 4, '+61400111222', 540.00, 'EncryptedDataHere', 'confirmed'),
-(5, 2, '2025-12-27', '2025-12-30', 2, '+61400333444', 660.00, 'EncryptedDataHere', 'confirmed'),
-(4, 7, '2026-01-05', '2026-01-08', 3, '+61400111222', 585.00, 'EncryptedDataHere', 'confirmed'),
-(5, 8, '2026-01-12', '2026-01-15', 2, '+61400333444', 720.00, 'EncryptedDataHere', 'confirmed');
+(4, 1, '2025-11-15', '2025-11-18', 4, '+61400111222', 1050.00, '1TyQxpkQ/KOD+tCp3ekK/YDaY3VDoDRZi/PsBqO8reGkIQ2tRUez/F7j0iBWxK4wrojr1/KmS4rvMg0dMB0SmC+/ACL6pxt/C8RafKCaQOwMv/KppcYooO+d9ekEDIBDcOfZuc3kDSJuNxM8Tb7wxECu9q7FO3wfcB4RqirTQGQ=', 'confirmed'),
+(4, 2, '2025-12-24', '2025-12-28', 2, '+61400111222', 880.00, 'ZwRh8YMbRfEvFphBpIcatH8l9KXeTkpIQ2B7fJMpArzgZ8O0Vkt90DdlhLLHLEaQlly7pT9Rg2LVHuwtekQCkmK2gdz/dtxqubc46wsr7efSwlI0s61RocoBo5y7qXQAyi0s3RKz6pkgt1O0gH4r15fsS17ilewrPqzfK+jTGao=', 'confirmed'),
+(5, 5, '2025-09-01', '2025-09-05', 2, '+61400333444', 600.00, 'uQVPA9bxddPbVncNeCzZYsx4Y9IWSgh8GzP1lc/R8oubOEkP2CXm/EGPnRn6r9HWm2ZvlEYILTTnalBw3WtMjSR7vnA05CjFxiJQJvwjyQvKnXc+50H1LazAa3eOYstrUZZAV46awPKN8tw1djht/xSEnt6Vth67n5Xg3p88ZyA=', 'confirmed'),
+(4, 4, '2025-12-05', '2025-12-08', 5, '+61400111222', 840.00, 'P04ecbgzXZto6SiEA4W38wzPysEhlWPcf7XHtbjdgoyd/6kPymT2tDQzaLcL6CdRtJxUGDu2D+oVLa7zbDBJVZx6PRqU8z5z511DyLDWpuVjsIy/FyZ/lO9NuVHt1RwB9AUGxrhk7TzUmAIAuvt6JK/Rg3h8S2UM2anslwUOtIf5RShYOYEkBlHgTWjeB7IC', 'confirmed'),
+(5, 6, '2025-12-10', '2025-12-13', 2, '+61400333444', 900.00, 'uUyK9OMDcLz2mnw8SKpsC+HWDBZUg5i1Wre3MZcNuyJJQXJo0EdQi0I82KOPdc1NksImtzpzQG6F1ggSxfqD28HN76FinM2H7PqsQq5FGYtc/fIzviOaI1ZXPeb1KZZRiUpLeYhMQrkU8jzt/6IwxPhz+qjKNFsau31bFOPInQA=', 'confirmed'),
+(4, 3, '2025-12-15', '2025-12-18', 4, '+61400111222', 540.00, 'toCrEh94LWygvKoZHcf+g9zummZW+2nIvSHxygQUap50yh6MjaYCd1jUxwFShR3tRSR6iHXp8eV5Jlng23qtheNUKJXNyV4yUkf/9FYEy2KxQ5o+RLpHukn9bnbt1K0l2z/O5ZHJWIn1JUze3z1wHBX+DPSxbkAthbYhFodot5Y=', 'confirmed'),
+(5, 2, '2025-12-27', '2025-12-30', 2, '+61400333444', 660.00, '5nUlO2o7UULtbTuawiZVG5ogEHE9ND1P0t1ubPJ6o21H+gINcpKd+MkahPX7W+4Gr8CXdPED9LV8f8iuxr6A+FSTj1pdSe8gfy++DESKNtgx6dyqDsuOuFh86hagjJl0V5vdRAt8nT7j/I4lW7zsw5y6MYAT2vp3ZPwDH6u30xo=', 'confirmed'),
+(4, 7, '2026-01-05', '2026-01-08', 3, '+61400111222', 585.00, 'Jf2VkTFEPCWiuVHWqniyQ4jvolZH/6PnaILk87UQa4wq1Mmhg4GDgphjQBn7SgEqEyO6LLR0YpwcrQRLz6a3wAuLxfvBQdbnbsW1URNi54Z7d9IbN8AA/oXFKWAyJXfj/jj2rMN31dVtNMBy+jy/OklpNvODCh59PfHUMtTUjLs=', 'confirmed'),
+(5, 8, '2026-01-12', '2026-01-15', 2, '+61400333444', 720.00, '1tF8Hm01dS8M069HOaCmqK7SwshoBCIy5nyw/94xHcuZdHMp9vBAMYiRGSmE44954GK058NNChRPRWOxfeOw8BAQOlmvKLHal4bhMHDylCMs7KmMy2uY4jc4F+OVtzcf8B3ZBYxCVnpAZ1mk8S1cq/Yfri2LB5ZqsvXesmlmhYA=', 'confirmed');

@@ -20,8 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-$conn->close();
-
 function validateSearch($city, $check_in, $check_out, $guests)
 {
     $errs = [];
@@ -210,3 +208,6 @@ function searchAccommodations($conn, $city, $check_in, $check_out, $guests)
     <script src="js/scroll-to-top.js"></script>
 </body>
 </html>
+<?php
+$conn->close();
+?>

@@ -1,5 +1,6 @@
 <?php
 require "includes/dbconn.php";
+session_start();
 
 if (isset($_POST["email"]) && isset($_POST["password"])) {
   $userType       = htmlspecialchars($_POST["userType"]);
@@ -29,7 +30,6 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
 }
 
 ?>
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>

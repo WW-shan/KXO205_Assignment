@@ -1,9 +1,4 @@
 <?php
-// Dynamic Navigation Bar based on user role
-if (!isset($_SESSION)) {
-    session_start();
-}
-
 // Get current page name for active state
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>

@@ -4,7 +4,7 @@ require "includes/dbconn.php";
 require "includes/csrf.php";
 require "includes/encryption.php";
 
-if (!isset($_SESSION["role"]) || $_SESSION["role"] != "client") {
+if (!isset($_SESSION["role"])) {
     redirect("login.php");
 }
 
@@ -40,7 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($errors)) {
         if (createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out, $guests, $phone_number, $payment_method, $card_last4, $accommodation["pricePerNight"])) {
             $conn->close();
-            redirect("client.php?success=Booking completed successfully!");
+            // Redirect based on user role
+            $redirectPage = $_SESSION["role"] === "client" ? "client.php" : 
+                           ($_SESSION["role"] === "host" ? "host.php" : "manager.php");
+            redirect("$redirectPage?success=Booking completed successfully!");
         }
         $errors[] = "Error creating booking. Please try again.";
     }
@@ -252,6 +255,20 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Guest Information</h5>
+
+                        <?php if ($_SESSION["role"] !== "client"): ?>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-info-circle me-2"></i>Notice for <?php echo ucfirst($_SESSION["role"]); ?> Account
+                            </h6>
+                            <p class="mb-0">
+                                You are currently logged in as a <strong><?php echo $_SESSION["role"]; ?></strong>. 
+                                To view and manage your bookings, please use a <strong>client</strong> account.
+                                Bookings made with this account will not appear in your dashboard.
+                            </p>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php endif; ?>
 
                         <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">

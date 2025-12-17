@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  # MySQL
+  db:
+    image: mysql:8.0
+    container_name: kxo205_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: kxo205
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_HOST_AUTH_METHOD: mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    networks:
+      - kxo205_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # PHP
+  web:
+    image: php:8.2-apache
+    container_name: kxo205_web
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini
+      - ./includes/dbconn_docker.php:/var/www/html/includes/dbconn.php
+    networks:
+      - kxo205_network
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  kxo205_network:
+    driver: bridge

@@ -2,7 +2,7 @@
 session_start();
 require "includes/dbconn.php";
 
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["userId"])) {
     redirect("login.php");
 }
 
@@ -11,6 +11,7 @@ if (!isset($_GET["id"])) {
 }
 
 $bookingId = $_GET["id"];
+$currentUserId = $_SESSION["userId"];
 
 if ($_SESSION["role"] == "client") {
     cancelClientBooking($conn, $bookingId, $currentUserId);

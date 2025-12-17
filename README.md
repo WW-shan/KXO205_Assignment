@@ -55,7 +55,7 @@ A full-stack accommodation booking system built with PHP, MySQL, and Bootstrap. 
    - Manager: `manager@kxo205.com`
    - Host: `host1@kxo205.com`
    - Client: `client1@kxo205.com`
-   - Password (all): Check `database.sql` for hashed passwords
+   - Password (all): `Password123!`
 
 ## Database Management
 

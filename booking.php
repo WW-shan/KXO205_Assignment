@@ -267,7 +267,6 @@ function createBooking($conn, $user_id, $accommodation_id, $check_in, $check_out
                                 To view and manage your bookings, please use a <strong>client</strong> account.
                                 Bookings made with this account will not appear in your dashboard.
                             </p>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         <?php endif; ?>
 

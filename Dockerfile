@@ -4,6 +4,8 @@ RUN a2enmod rewrite
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
+RUN mkdir -p /var/lib/php/sessions && chown -R www-data:www-data /var/lib/php/sessions
+
 WORKDIR /var/www/html
 
 COPY . .

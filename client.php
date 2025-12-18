@@ -51,7 +51,7 @@ $csrfToken = generateCsrfToken();
           </thead>
           <tbody>
             <?php
-                $sql = "SELECT b.*, a.name, u.firstName, u.lastName FROM BOOKING b 
+                $sql = "SELECT b.*, a.*, u.firstName, u.lastName, u.phoneNumber as hostPhone, u.email as hostEmail FROM BOOKING b 
                   JOIN ACCOMMODATION a ON b.accommodationId = a.accommodationId 
                   JOIN USER u ON a.hostId = u.userId 
                     WHERE b.userId = $user_id;";
@@ -90,14 +90,18 @@ $csrfToken = generateCsrfToken();
                     "<span class='badge bg-secondary'>Cancelled</span>" : 
                     "<span class='badge bg-success'>Confirmed</span>";
                   echo "<td>" . $statusBadge . "</td>";
-                  
+                  echo "<td>";
+                  echo "<div class='d-flex gap-2'>";
+                  echo "<a href='edit-accommodation.php?id=" . htmlspecialchars($row["accommodationId"]) . "&readonly=1' class='btn btn-sm btn-info' target='_blank'><i class='bi bi-eye'></i> View</a>";
                   if ($can_cancel) {
-                    echo "<td><a href='cancel-booking.php?id=" . htmlspecialchars($row["bookingId"]) . "&token=" . urlencode($csrfToken) . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure you want to cancel this booking?')\"><i class='bi bi-x-circle'></i> Cancel</a></td>";
+                    echo "<a href='cancel-booking.php?id=" . htmlspecialchars($row["bookingId"]) . "&token=" . urlencode($csrfToken) . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure you want to cancel this booking?')\"><i class='bi bi-x-circle'></i> Cancel</a>";
                   } elseif ($is_cancelled) {
-                    echo "<td><span class='text-muted'>Cancelled</span></td>";
+                    echo "<span class='text-muted'>Cancelled</span>";
                   } else {
-                    echo "<td><span class='text-muted'>Expired</span></td>";
+                    echo "<span class='text-muted'>Expired</span>";
                   }
+                  echo "</div>";
+                  echo "</td>";
                   echo "</tr>";
                 }
               } else {

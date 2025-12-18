@@ -96,11 +96,12 @@ $csrfToken = generateCsrfToken();
               <th scope="col">Payment</th>
               <th scope="col">Total</th>
               <th scope="col">Status</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
             <?php
-                $sql = "SELECT b.*, a.name, u.firstName, u.lastName FROM BOOKING b 
+                $sql = "SELECT b.*, a.name, a.accommodationId, u.firstName, u.lastName FROM BOOKING b 
                   JOIN ACCOMMODATION a ON b.accommodationId = a.accommodationId 
                   JOIN USER u ON b.userId = u.userId 
                     WHERE a.hostId = $host_id;";
@@ -136,11 +137,13 @@ $csrfToken = generateCsrfToken();
                     "<span class='badge bg-secondary'>Cancelled</span>" : 
                     "<span class='badge bg-success'>Confirmed</span>";
                   echo "<td>" . $statusBadge . "</td>";
-                  
+                  echo "<td>";
+                  echo "<a href='edit-accommodation.php?id=" . htmlspecialchars($row["accommodationId"]) . "&readonly=1' class='btn btn-sm btn-info' target='_blank'><i class='bi bi-eye'></i> View</a>";
+                  echo "</td>";
                   echo "</tr>";
                 }
               } else {
-                echo "<tr><td colspan='9' class='text-center'>No bookings yet</td></tr>";
+                echo "<tr><td colspan='10' class='text-center'>No bookings yet</td></tr>";
               }
               $result->free();
             }

@@ -582,7 +582,7 @@ cd KXO205_Assignment</code></pre>
                   <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShengyi" aria-expanded="true">
                       <i class="bi bi-person-circle me-2 text-primary"></i>
-                      <strong>Shengyi Shi</strong> <span class="badge bg-primary ms-2">Frontend + Backend API</span>
+                      <strong>Shengyi Shi</strong> <span class="badge bg-primary ms-2">Frontend + Backend</span>
                     </button>
                   </h2>
                   <div id="collapseShengyi" class="accordion-collapse collapse show" data-bs-parent="#roleAccordion">

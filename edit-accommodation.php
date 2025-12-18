@@ -3,13 +3,27 @@ session_start();
 require "includes/dbconn.php";
 require "includes/csrf.php";
 
-// Check if user is manager
-if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
-    redirect("login.php");
+// Check if user is manager or client/host viewing in readonly mode
+$readonly = isset($_GET["readonly"]) && $_GET["readonly"] == 1;
+$user_role = $_SESSION["role"] ?? null;
+
+// Determine redirect destination based on role
+if ($readonly) {
+    // Readonly mode: clients and hosts can view
+    if (!isset($_SESSION["role"]) || !in_array($_SESSION["role"], ["client", "host"])) {
+        redirect("login.php");
+    }
+    $redirect_page = ($user_role === "host") ? "host.php" : "client.php";
+} else {
+    // Edit mode: only managers
+    if (!isset($_SESSION["role"]) || $_SESSION["role"] != "manager") {
+        redirect("login.php");
+    }
+    $redirect_page = "manager.php";
 }
 
 if (!isset($_GET["id"])) {
-    redirect("manager.php");
+    redirect($redirect_page);
 }
 
 $accommodation_id = $_GET["id"];
@@ -20,17 +34,20 @@ $selectedAmenities = [];
 if (empty($_POST)) {
     $row = select();
     if (!$row) {
-        redirect("manager.php");
+        redirect($redirect_page);
     }
     $allAmenities = fetchAllAmenities();
     $selectedAmenities = fetchAccommodationAmenities($accommodation_id);
 } else {
+    if ($readonly) {
+        redirect($redirect_page);
+    }
     // Verify CSRF token
     verifyCsrfToken();
     
     update();
     $conn->close();
-    redirect("manager.php");
+    redirect($redirect_page);
 }
 
 function redirect($url)
@@ -136,41 +153,41 @@ function update()
 
     <!-- Main Content -->
     <main class="container mt-5">
-        <h2 class="mb-4">Edit Accommodation</h2>
+        <h2 class="mb-4"><?php echo $readonly ? "View Accommodation" : "Edit Accommodation"; ?></h2>
 
         <div class="row">
             <div class="col-md-8">
-                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=$accommodation_id"); ?>">
-                    <?php csrfTokenField(); ?>
+                <form method="<?php echo $readonly ? "GET" : "POST"; ?>" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=$accommodation_id"); ?>">
+                    <?php if (!$readonly) csrfTokenField(); ?>
                     <div class="mb-3">
                         <label for="name" class="form-label">Property Name</label>
                         <input type="text" class="form-control" name="name" id="name" 
-                               value="<?php echo htmlspecialchars($row["name"]); ?>" required>
+                               value="<?php echo htmlspecialchars($row["name"]); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                     </div>
 
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" name="address" id="address" 
-                               value="<?php echo htmlspecialchars($row["address"]); ?>" required>
+                               value="<?php echo htmlspecialchars($row["address"]); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                     </div>
 
                     <div class="mb-3">
                         <label for="city" class="form-label">City</label>
                         <input type="text" class="form-control" name="city" id="city" 
-                               value="<?php echo htmlspecialchars($row["city"]); ?>" required>
+                               value="<?php echo htmlspecialchars($row["city"]); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="pricePerNight" class="form-label">Price per Night ($)</label>
                             <input type="number" class="form-control" name="pricePerNight" id="pricePerNight" 
-                                   value="<?php echo htmlspecialchars($row["pricePerNight"]); ?>" step="0.01" required>
+                                   value="<?php echo htmlspecialchars($row["pricePerNight"]); ?>" step="0.01" <?php echo $readonly ? "readonly" : ""; ?> required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="maxGuests" class="form-label">Max Guests</label>
                             <input type="number" class="form-control" name="maxGuests" id="maxGuests" 
-                                   value="<?php echo htmlspecialchars($row["maxGuests"]); ?>" required>
+                                   value="<?php echo htmlspecialchars($row["maxGuests"]); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                         </div>
                     </div>
 
@@ -178,25 +195,25 @@ function update()
                         <div class="col-md-6 mb-3">
                             <label for="bedrooms" class="form-label">Bedrooms</label>
                             <input type="number" class="form-control" name="bedrooms" id="bedrooms" 
-                                   value="<?php echo htmlspecialchars($row["bedrooms"]); ?>" required>
+                                   value="<?php echo htmlspecialchars($row["bedrooms"]); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="bathrooms" class="form-label">Bathrooms</label>
                             <input type="number" class="form-control" name="bathrooms" id="bathrooms" 
-                                   value="<?php echo htmlspecialchars($row["bathrooms"]); ?>" required>
+                                   value="<?php echo htmlspecialchars($row["bathrooms"]); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" name="description" id="description" rows="4"><?php echo htmlspecialchars($row["description"] ?? ""); ?></textarea>
+                        <textarea class="form-control" name="description" id="description" rows="4" <?php echo $readonly ? "readonly" : ""; ?>><?php echo htmlspecialchars($row["description"] ?? ""); ?></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="imagePath" class="form-label">Image Path</label>
                         <input type="text" class="form-control" name="imagePath" id="imagePath" 
-                               value="<?php echo htmlspecialchars($row["imagePath"] ?? ""); ?>" required>
+                               value="<?php echo htmlspecialchars($row["imagePath"] ?? ""); ?>" <?php echo $readonly ? "readonly" : ""; ?> required>
                     </div>
 
                     <div class="mb-3">
@@ -204,7 +221,7 @@ function update()
                         <?php foreach ($allAmenities as $amenity): ?>
                         <?php $isChecked = in_array($amenity['amenityId'], $selectedAmenities) ? 'checked' : ''; ?>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="amenities[]" id="amenity<?php echo $amenity['amenityId']; ?>" value="<?php echo $amenity['amenityId']; ?>" <?php echo $isChecked; ?>>
+                            <input class="form-check-input" type="checkbox" name="amenities[]" id="amenity<?php echo $amenity['amenityId']; ?>" value="<?php echo $amenity['amenityId']; ?>" <?php echo $isChecked; ?> <?php echo $readonly ? "disabled" : ""; ?>>
                             <label class="form-check-label" for="amenity<?php echo $amenity['amenityId']; ?>">
                                 <i class="<?php echo htmlspecialchars($amenity['icon']); ?>"></i> <?php echo htmlspecialchars($amenity['name']); ?>
                             </label>
@@ -213,12 +230,18 @@ function update()
                     </div>
 
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='manager.php'">
-                            <i class="bi bi-x-circle me-2"></i>Cancel
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Update
-                        </button>
+                        <?php if ($readonly): ?>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='<?php echo $user_role === 'host' ? 'host.php' : 'client.php'; ?>'">
+                                <i class="bi bi-arrow-left me-2"></i>Back
+                            </button>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='manager.php'">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Update
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </form>
             </div>

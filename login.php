@@ -3,6 +3,18 @@ session_start();
 require "includes/dbconn.php";
 require "includes/csrf.php";
 
+// If already logged in, redirect to appropriate page
+if (isset($_SESSION["role"])) {
+    if ($_SESSION["role"] == "manager") {
+        header("Location: manager.php");
+    } elseif ($_SESSION["role"] == "host") {
+        header("Location: host.php");
+    } else {
+        header("Location: client.php");
+    }
+    exit;
+}
+
 $invalidLogin = false;
 if (isset($_POST["email"]) && isset($_POST["password"])) {
     // Verify CSRF token

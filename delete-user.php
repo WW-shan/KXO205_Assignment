@@ -32,6 +32,14 @@ if ($user_id == $_SESSION["userId"]) {
 $delete_bookings_sql = "DELETE FROM BOOKING WHERE userId = $user_id;";
 $conn->query($delete_bookings_sql);
 
+// Delete accommodation amenities for accommodations owned by this user (if host)
+$delete_amenities_sql = "DELETE FROM ACCOMMODATION_AMENITY WHERE accommodationId IN (SELECT accommodationId FROM ACCOMMODATION WHERE hostId = $user_id);";
+$conn->query($delete_amenities_sql);
+
+// Delete accommodations owned by this user (if host)
+$delete_accommodations_sql = "DELETE FROM ACCOMMODATION WHERE hostId = $user_id;";
+$conn->query($delete_accommodations_sql);
+
 // Delete user
 $sql = "DELETE FROM USER WHERE userId = $user_id;";
 $conn->query($sql);

@@ -28,6 +28,10 @@ if ($user_id == $_SESSION["userId"]) {
     exit;
 }
 
+// Delete bookings for accommodations owned by this user (if host)
+$delete_accommodation_bookings_sql = "DELETE FROM BOOKING WHERE accommodationId IN (SELECT accommodationId FROM ACCOMMODATION WHERE hostId = $user_id);";
+$conn->query($delete_accommodation_bookings_sql);
+
 // Delete user's bookings first (due to foreign key constraint)
 $delete_bookings_sql = "DELETE FROM BOOKING WHERE userId = $user_id;";
 $conn->query($delete_bookings_sql);

@@ -2,7 +2,7 @@
 define("DB_HOST", "db"); // Docker
 define("DB_NAME", "KXO205"); // Set this to your username
 define("DB_USER", "root"); // Set this to your username
-define("DB_PASS", ""); // Set this to your DB password
+define("DB_PASS", "123456"); // Set this to your DB password
 
 try {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);

@@ -122,4 +122,4 @@ define("DB_NAME", "KXO205");
 
 ## Author
 
-Shengyi Shi - 744564
+744564
